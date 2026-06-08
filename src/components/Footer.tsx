@@ -17,11 +17,11 @@ export default function Footer() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-display font-black tracking-tight text-xl text-busec-navy group-hover:text-busec-blue transition-colors duration-300">
-                  BUSEC
+                <span className="font-display font-black tracking-tight text-xs text-busec-navy group-hover:text-busec-blue transition-colors duration-300 leading-none">
+                  Babcock University Students’
                 </span>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400">
-                  Babcock Entrepreneurs
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mt-0.5 leading-none">
+                  Entrepreneurship Club
                 </span>
               </div>
             </Link>

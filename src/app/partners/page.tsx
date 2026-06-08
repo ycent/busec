@@ -62,7 +62,7 @@ export default function Partners() {
       <Navbar />
 
       {/* Hero Header */}
-      <section className="relative pt-36 pb-20 overflow-hidden bg-slate-50 border-b border-slate-100">
+      <section className="relative pt-36 pb-10 overflow-hidden bg-slate-50 border-b border-slate-100">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-busec-blue/5 via-transparent to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 text-center z-10 space-y-6">
           <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-busec-navy tracking-tight leading-none max-w-4xl mx-auto">
@@ -75,7 +75,7 @@ export default function Partners() {
       </section>
 
       {/* Partners List / Logos */}
-      <section className="py-24 bg-white">
+      <section className="pt-10 pb-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-16">
           <div className="text-center max-w-2xl mx-auto space-y-4">
             <h2 className="font-display font-black text-2xl sm:text-3xl text-busec-navy tracking-tight">Our Strategic Alliance</h2>
@@ -160,7 +160,7 @@ export default function Partners() {
       </section>
 
       {/* Become a Partner Form */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="pt-10 pb-24 bg-white border-t border-slate-100">
         <div className="max-w-3xl mx-auto px-6 space-y-12">
           <div className="text-center space-y-3">
             <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">Become a Partner</h2>

@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { bicEditions as initialBic, BICEdition, bewEditions as initialBew, BEWEdition } from "@/lib/mockData";
-import { Download, Plus, CheckCircle, XCircle, Database, Key, Copy, Check } from "lucide-react";
+import { bicEditions as initialBic, BICEdition, bewEditions as initialBew, BEWEdition, galleryAlbums } from "@/lib/mockData";
+import { Download, Plus, CheckCircle, XCircle, Database, Key, Copy, Check, Trash2, Image, Link2, Eye } from "lucide-react";
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +17,17 @@ export default function AdminDashboard() {
   const [bewEditions, setBewEditions] = useState<BEWEdition[]>([]);
 
   const [copiedSchema, setCopiedSchema] = useState(false);
+  
+  // Gallery Sync States
+  const [galleryForm, setGalleryForm] = useState({
+    title: "",
+    category: "BIC",
+    driveUrl: ""
+  });
+  const [syncedAlbums, setSyncedAlbums] = useState<any[]>([]);
+  const [syncLoading, setSyncLoading] = useState(false);
+  const [syncError, setSyncError] = useState("");
+  const [selectedAlbumId, setSelectedAlbumId] = useState<string | null>(null);
   const dbSchemaSql = `
 -- BUSEC 2027 PostgreSQL Database Schema
 
@@ -173,12 +184,122 @@ CREATE TABLE bew_editions (
     if (storedShowcase) {
       setShowcaseForm(JSON.parse(storedShowcase));
     }
+
+    const storedGallery = localStorage.getItem("busec_gallery_albums");
+    let currentGallery: any[] = [];
+    if (storedGallery) {
+      currentGallery = JSON.parse(storedGallery);
+      let modified = false;
+      galleryAlbums.forEach(staticAlbum => {
+        const exists = currentGallery.some(a => a.id === staticAlbum.id);
+        if (!exists) {
+          currentGallery.push(staticAlbum);
+          modified = true;
+        }
+      });
+      if (modified) {
+        localStorage.setItem("busec_gallery_albums", JSON.stringify(currentGallery));
+      }
+    } else {
+      const oldCustom = localStorage.getItem("busec_custom_gallery");
+      const customList = oldCustom ? JSON.parse(oldCustom) : [];
+      currentGallery = [...customList, ...galleryAlbums];
+      localStorage.setItem("busec_gallery_albums", JSON.stringify(currentGallery));
+    }
+    setSyncedAlbums(currentGallery);
   }, []);
 
   const handleSaveShowcase = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem("busec_hero_showcase", JSON.stringify(showcaseForm));
     alert("Homepage hero showcase card updated! Go to the home page to view the change.");
+  };
+
+  const handleSyncGallery = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!galleryForm.title || !galleryForm.driveUrl) {
+      setSyncError("Please fill out all fields.");
+      return;
+    }
+
+    setSyncLoading(true);
+    setSyncError("");
+
+    try {
+      const response = await fetch("/api/gallery/sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ driveUrl: galleryForm.driveUrl })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to sync Google Drive folder.");
+      }
+
+      const newAlbum = {
+        id: "album-custom-" + Date.now(),
+        title: galleryForm.title,
+        category: galleryForm.category,
+        coverImage: result.images[0] || "",
+        images: result.images
+      };
+
+      const filteredAlbums = syncedAlbums.filter(album => album.title !== galleryForm.title);
+      const updated = [newAlbum, ...filteredAlbums];
+      setSyncedAlbums(updated);
+      localStorage.setItem("busec_gallery_albums", JSON.stringify(updated));
+
+      // Reset form
+      setGalleryForm({
+        title: "",
+        category: "BIC",
+        driveUrl: ""
+      });
+
+      alert(`Successfully synced ${result.imageCount} pictures for the album "${newAlbum.title}"!`);
+    } catch (err: any) {
+      console.error(err);
+      setSyncError(err.message || "An unexpected error occurred during sync.");
+    } finally {
+      setSyncLoading(false);
+    }
+  };
+
+  const handleDeleteAlbum = (albumId: string) => {
+    if (confirm("Are you sure you want to delete this album?")) {
+      const updated = syncedAlbums.filter(album => album.id !== albumId);
+      setSyncedAlbums(updated);
+      localStorage.setItem("busec_gallery_albums", JSON.stringify(updated));
+      if (selectedAlbumId === albumId) {
+        setSelectedAlbumId(null);
+      }
+    }
+  };
+
+  const handleDeletePhoto = (albumId: string, photoUrl: string) => {
+    if (confirm("Are you sure you want to delete this photo from the album?")) {
+      const updated = syncedAlbums.map(album => {
+        if (album.id === albumId) {
+          const updatedImages = album.images.filter((img: string) => img !== photoUrl);
+          let cover = album.coverImage;
+          if (album.coverImage === photoUrl) {
+            cover = updatedImages[0] || "";
+          }
+          return {
+            ...album,
+            coverImage: cover,
+            images: updatedImages
+          };
+        }
+        return album;
+      });
+      setSyncedAlbums(updated);
+      localStorage.setItem("busec_gallery_albums", JSON.stringify(updated));
+    }
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -344,7 +465,7 @@ CREATE TABLE bew_editions (
     <>
       <Navbar />
 
-      <section className="relative pt-36 pb-20 overflow-hidden bg-slate-55 border-b border-slate-100">
+      <section className="relative pt-36 pb-10 overflow-hidden bg-slate-55 border-b border-slate-100">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-busec-blue/5 via-transparent to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 z-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
           <div className="space-y-3">
@@ -412,6 +533,14 @@ CREATE TABLE bew_editions (
               }`}
             >
               Configure Hero Card
+            </button>
+            <button
+              onClick={() => setActiveTab("gallery")}
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                activeTab === "gallery" ? "bg-busec-blue text-white shadow-sm" : "text-slate-655 hover:bg-slate-50 hover:text-busec-blue"
+              }`}
+            >
+              Configure Gallery
             </button>
             <button
               onClick={() => setActiveTab("schema")}
@@ -757,6 +886,170 @@ CREATE TABLE bew_editions (
                   </button>
                 </div>
               </form>
+            )}
+
+            {/* TAB: Configure Gallery */}
+            {activeTab === "gallery" && (
+              <div className="space-y-8 animate-in fade-in duration-200">
+                <div className="border-b border-slate-200 pb-4">
+                  <h3 className="font-display font-bold text-xl text-slate-850">Google Drive Gallery Sync</h3>
+                  <p className="text-xs text-slate-500 font-light mt-1">Paste a public Google Drive folder link to import all of its photos into the BUSEC media gallery.</p>
+                </div>
+
+                <form onSubmit={handleSyncGallery} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Album Title</label>
+                      <input
+                        type="text"
+                        required
+                        value={galleryForm.title}
+                        onChange={(e) => setGalleryForm({ ...galleryForm, title: e.target.value })}
+                        placeholder="e.g. Babcock Innovation Challenge 7.0 Gallery"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Album Category</label>
+                      <select
+                        value={galleryForm.category}
+                        onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      >
+                        <option value="Entrepreneurship Week">Entrepreneurship Week</option>
+                        <option value="BIC">BIC</option>
+                        <option value="Creative Summit">Creative Summit</option>
+                        <option value="Workshops">Workshops</option>
+                        <option value="Networking Events">Networking Events</option>
+                        <option value="Outreach Activities">Outreach Activities</option>
+                        <option value="Executive Retreats">Executive Retreats</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Google Drive Folder Link</label>
+                      <input
+                        type="url"
+                        required
+                        value={galleryForm.driveUrl}
+                        onChange={(e) => setGalleryForm({ ...galleryForm, driveUrl: e.target.value })}
+                        placeholder="e.g. https://drive.google.com/drive/folders/..."
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                      <span className="text-[10px] text-slate-400 font-light block mt-1">
+                        Make sure the folder sharing settings in Google Drive are set to <strong>"Anyone with the link can view"</strong>.
+                      </span>
+                    </div>
+                  </div>
+
+                  {syncError && (
+                    <div className="text-xs font-semibold text-rose-600 bg-rose-50 p-4 rounded-xl border border-rose-100">
+                      {syncError}
+                    </div>
+                  )}
+
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      disabled={syncLoading}
+                      className="px-6 py-3 bg-busec-blue hover:bg-busec-navy disabled:bg-slate-300 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-busec-blue/15 flex items-center space-x-2"
+                    >
+                      {syncLoading ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          <span>Syncing Photos...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-3.5 h-3.5" />
+                          <span>Sync Folder Photos</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+                {/* Gallery Albums Manager */}
+                <div className="border-t border-slate-200 pt-8 space-y-4">
+                  <h4 className="font-display font-bold text-sm text-slate-850">Gallery Albums Manager</h4>
+                  {syncedAlbums.length > 0 ? (
+                    <div className="space-y-4">
+                      {syncedAlbums.map((album) => (
+                        <div key={album.id} className="p-5 bg-white border border-slate-150 rounded-2xl shadow-sm space-y-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3 overflow-hidden">
+                              {album.coverImage ? (
+                                <img src={album.coverImage} alt="" className="w-12 h-12 object-cover rounded-xl border border-slate-100 flex-shrink-0" />
+                              ) : (
+                                <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 flex-shrink-0">
+                                  <Image className="w-6 h-6" />
+                                </div>
+                              )}
+                              <div className="overflow-hidden">
+                                <h5 className="font-semibold text-xs text-slate-800 truncate">{album.title}</h5>
+                                <p className="text-[10px] text-slate-500 font-light mt-0.5">{album.category} • {album.images.length} photos</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => setSelectedAlbumId(selectedAlbumId === album.id ? null : album.id)}
+                                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 border cursor-pointer ${
+                                  selectedAlbumId === album.id
+                                    ? "bg-slate-800 text-white border-slate-800"
+                                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                                }`}
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>{selectedAlbumId === album.id ? "Hide Photos" : "Manage Photos"}</span>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteAlbum(album.id)}
+                                className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-rose-100"
+                                title="Delete album"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Expanded Photo Manager Grid */}
+                          {selectedAlbumId === album.id && (
+                            <div className="pt-4 border-t border-slate-100 space-y-3">
+                              <div className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                                Album Pictures ({album.images.length})
+                              </div>
+                              {album.images.length > 0 ? (
+                                <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                  {album.images.map((img: string, imgIdx: number) => (
+                                    <div key={imgIdx} className="relative group aspect-square rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                                      <img src={img} alt="" className="w-full h-full object-cover" />
+                                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                        <button
+                                          type="button"
+                                          onClick={() => handleDeletePhoto(album.id, img)}
+                                          className="p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition-all transform scale-90 group-hover:scale-100 cursor-pointer shadow-md"
+                                          title="Delete photo"
+                                        >
+                                          <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-xs text-slate-450 italic font-light py-2">This album has no photos.</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-455 italic font-light">No gallery albums available yet.</p>
+                  )}
+                </div>
+              </div>
             )}
 
             {/* TAB: PostgreSQL DB Schema */}

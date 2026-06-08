@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { galleryAlbums } from "@/lib/mockData";
+import { galleryAlbums, GalleryAlbum } from "@/lib/mockData";
 import { Film, X, ZoomIn } from "lucide-react";
 
-const categories = [
+const initialCategories = [
   "All",
   "Entrepreneurship Week",
   "BIC",
@@ -20,8 +20,40 @@ const categories = [
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [albums, setAlbums] = useState<GalleryAlbum[]>([]);
 
-  const allMedia = galleryAlbums.flatMap((album) =>
+  useEffect(() => {
+    const storedAlbums = localStorage.getItem("busec_gallery_albums");
+    let currentAlbums: GalleryAlbum[] = [];
+    if (storedAlbums) {
+      currentAlbums = JSON.parse(storedAlbums);
+      let modified = false;
+      galleryAlbums.forEach(staticAlbum => {
+        const exists = currentAlbums.some(a => a.id === staticAlbum.id);
+        if (!exists) {
+          currentAlbums.push(staticAlbum);
+          modified = true;
+        }
+      });
+      if (modified) {
+        localStorage.setItem("busec_gallery_albums", JSON.stringify(currentAlbums));
+      }
+    } else {
+      const oldCustom = localStorage.getItem("busec_custom_gallery");
+      const customList = oldCustom ? JSON.parse(oldCustom) : [];
+      currentAlbums = [...customList, ...galleryAlbums];
+      localStorage.setItem("busec_gallery_albums", JSON.stringify(currentAlbums));
+    }
+    setAlbums(currentAlbums);
+  }, []);
+
+  const combinedAlbums = albums;
+
+  // Dynamically compute unique categories based on albums list
+  const customCategories = Array.from(new Set(albums.map(album => album.category)));
+  const categories = ["All", ...Array.from(new Set([...initialCategories.slice(1), ...customCategories]))];
+
+  const allMedia = albums.flatMap((album) =>
     album.images.map((img) => ({
       url: img,
       albumTitle: album.title,
@@ -38,7 +70,7 @@ export default function Gallery() {
       <Navbar />
 
       {/* Hero Header */}
-      <section className="relative pt-36 pb-20 overflow-hidden bg-slate-55 border-b border-slate-100">
+      <section className="relative pt-36 pb-10 overflow-hidden bg-slate-55 border-b border-slate-100">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-busec-blue/5 via-transparent to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 text-center z-10 space-y-6">
           <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-busec-navy tracking-tight leading-none max-w-4xl mx-auto">
@@ -51,7 +83,7 @@ export default function Gallery() {
       </section>
 
       {/* Category Selectors & Media Grid */}
-      <section className="py-20 bg-white">
+      <section className="pt-10 pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12">
           
           {/* Category Filter Pills */}
@@ -73,28 +105,28 @@ export default function Gallery() {
 
           {/* Media Grid */}
           {filteredMedia.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-2 [column-fill:_balance] box-border">
               {filteredMedia.map((media, idx) => (
                 <div
                   key={idx}
                   onClick={() => setActiveImage(media.url)}
-                  className="relative group rounded-2xl overflow-hidden aspect-4/3 border border-slate-150 bg-slate-50 cursor-pointer shadow-sm hover:shadow-lg transition-all duration-350"
+                  className="break-inside-avoid relative group rounded-xl overflow-hidden mb-2 cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-0.5 bg-slate-900"
                 >
                   <img
                     src={media.url}
                     alt={media.albumTitle}
-                    className="w-full h-full object-cover group-hover:scale-[1.02] transition-all duration-500 opacity-95 group-hover:opacity-100"
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-all duration-500 ease-out opacity-90 group-hover:opacity-100"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-350 flex flex-col justify-end p-5">
-                    <span className="text-[10px] font-bold text-busec-yellow uppercase tracking-widest">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                    <span className="text-[10px] font-bold text-busec-yellow uppercase tracking-widest translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                       {media.category}
                     </span>
-                    <h4 className="text-white font-display font-semibold text-sm mt-1">
+                    <h4 className="text-white font-display font-semibold text-sm mt-1 translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-[50ms]">
                       {media.albumTitle}
                     </h4>
                   </div>
-                  <div className="absolute top-4 right-4 p-2.5 rounded-xl bg-white/90 border border-slate-200 opacity-0 group-hover:opacity-100 transition-opacity duration-350 text-busec-blue shadow-sm">
-                    <ZoomIn className="w-4 h-4" />
+                  <div className="absolute top-4 right-4 p-2 rounded-xl bg-white/95 backdrop-blur-sm border border-slate-200/50 opacity-0 group-hover:opacity-100 transition-all duration-300 text-busec-navy shadow-md transform scale-90 group-hover:scale-100">
+                    <ZoomIn className="w-3.5 h-3.5" />
                   </div>
                 </div>
               ))}

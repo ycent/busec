@@ -48,7 +48,7 @@ export default function Resources() {
       <Navbar />
 
       {/* Hero Header */}
-      <section className="relative pt-36 pb-20 overflow-hidden bg-slate-55 border-b border-slate-100">
+      <section className="relative pt-36 pb-10 overflow-hidden bg-slate-55 border-b border-slate-100">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-busec-blue/5 via-transparent to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 text-center z-10 space-y-6">
           <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-busec-navy tracking-tight leading-none max-w-4xl mx-auto">
@@ -61,7 +61,7 @@ export default function Resources() {
       </section>
 
       {/* Toolkit Search & Filter Section */}
-      <section className="py-20 bg-white">
+      <section className="pt-10 pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 pb-8 border-b border-slate-100">
             <h2 className="font-display font-bold text-xl text-busec-navy">Startup Toolkit</h2>
@@ -188,7 +188,7 @@ export default function Resources() {
       </section>
 
       {/* Video Learning Center */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="pt-10 pb-24 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12">
           <div className="max-w-2xl space-y-2">
             <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">Video Learning Center</h2>
@@ -260,7 +260,7 @@ export default function Resources() {
       </section>
 
       {/* Student Businesses Showcase */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="pt-10 pb-24 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12">
           <div className="max-w-2xl space-y-2">
             <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">Student Business Showcase</h2>
