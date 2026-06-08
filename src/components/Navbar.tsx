@@ -163,7 +163,7 @@ export default function Navbar() {
 
             <Link
               href="/join"
-              className="ml-4 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/15 flex items-center space-x-1"
+              className="ml-4 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/15 flex items-center space-x-1"
             >
               <span>Join BUSEC</span>
             </Link>
@@ -235,7 +235,7 @@ export default function Navbar() {
           <div className="pt-6 border-t border-slate-100">
             <Link
               href="/join"
-              className="w-full py-4 rounded-xl text-center text-sm font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white transition-all duration-300 block"
+              className="w-full py-4 rounded-xl text-center text-sm font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 block"
             >
               Join BUSEC
             </Link>

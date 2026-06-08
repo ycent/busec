@@ -205,7 +205,7 @@ export default function Resources() {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-500 opacity-90"
               />
               <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center">
-                <button className="p-4 rounded-full bg-busec-yellow text-busec-navy shadow-lg hover:scale-105 transition-transform duration-300">
+                <button className="p-4 rounded-full bg-busec-yellow text-busec-navy border border-busec-blue shadow-lg hover:scale-105 transition-transform duration-300">
                   <Play className="w-6 h-6 fill-busec-navy" />
                 </button>
               </div>
@@ -222,7 +222,7 @@ export default function Resources() {
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-500 opacity-90"
               />
               <div className="absolute inset-0 bg-slate-900/10 flex items-center justify-center">
-                <button className="p-4 rounded-full bg-busec-yellow text-busec-navy shadow-lg hover:scale-105 transition-transform duration-300">
+                <button className="p-4 rounded-full bg-busec-yellow text-busec-navy border border-busec-blue shadow-lg hover:scale-105 transition-transform duration-300">
                   <Play className="w-6 h-6 fill-busec-navy" />
                 </button>
               </div>
@@ -335,7 +335,7 @@ export default function Resources() {
               />
               <button
                 type="submit"
-                className="px-6 py-3.5 rounded-xl bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white transition-all font-bold text-xs flex items-center justify-center space-x-1.5 flex-shrink-0"
+                className="px-6 py-3.5 rounded-xl bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all font-bold text-xs flex items-center justify-center space-x-1.5 flex-shrink-0"
               >
                 <span>Subscribe</span>
                 <Send className="w-3.5 h-3.5" />

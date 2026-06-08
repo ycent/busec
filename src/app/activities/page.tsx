@@ -86,7 +86,7 @@ export default function ActivitiesPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/bic"
-              className="px-8 py-4 rounded-xl text-xs font-bold bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/10 hover:-translate-y-0.5"
+              className="px-8 py-4 rounded-xl text-xs font-bold bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/10 hover:-translate-y-0.5"
             >
               Enter Babcock Innovation Challenge (BIC)
             </Link>

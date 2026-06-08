@@ -130,7 +130,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center space-x-3 text-xs font-light">
               <Mail className="w-4 h-4 text-busec-gold flex-shrink-0" />
-              <a href="mailto:info@busec.org" className="hover:text-busec-blue transition-colors">info@busec.org</a>
+              <a href="mailto:busec@babcock.edu.ng" className="hover:text-busec-blue transition-colors">busec@babcock.edu.ng</a>
             </div>
           </div>
         </div>

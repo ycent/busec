@@ -8,14 +8,15 @@ import Footer from "@/components/Footer";
 import { studentBusinesses, builderStories } from "@/lib/mockData";
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1600"
+  "/images/hero/hero-1.jpg",
+  "/images/hero/hero-2.jpg",
+  "/images/hero/hero-3.jpg",
+  "/images/hero/hero-4.jpg"
 ];
 
 export default function Home() {
   const [currentBgIndex, setCurrentBgIndex] = useState(0);
+  const [stories, setStories] = useState<any[]>([]);
   const [showcaseCard, setShowcaseCard] = useState({
     badge: "Live Showcase",
     title: "Babcock Innovation Challenge 7.0",
@@ -33,6 +34,25 @@ export default function Home() {
     const storedShowcase = localStorage.getItem("busec_hero_showcase");
     if (storedShowcase) {
       setShowcaseCard(JSON.parse(storedShowcase));
+    }
+
+    const storedStories = localStorage.getItem("busec_builder_stories");
+    if (storedStories) {
+      const parsed = JSON.parse(storedStories);
+      setStories(parsed.slice(0, 2));
+      // Auto sync to backend if localStorage differs from the file
+      if (JSON.stringify(parsed) !== JSON.stringify(builderStories)) {
+        fetch("/api/stories/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ stories: parsed })
+        }).catch(err => console.error("Sync error:", err));
+      }
+    } else {
+      setStories(builderStories.slice(0, 2));
+      if (builderStories.length > 0) {
+        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+      }
     }
 
     return () => clearInterval(timer);
@@ -89,7 +109,7 @@ export default function Home() {
             />
           ))}
           {/* Light overlay to maintain white/light theme readability */}
-          <div className="absolute inset-0 bg-white/92 backdrop-blur-[1px]"></div>
+          <div className="absolute inset-0 bg-white/75 backdrop-blur-[1px]"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 z-10 space-y-16 flex flex-col items-center">
@@ -115,7 +135,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/join"
-                className="px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 text-center shadow-md shadow-busec-yellow/15 flex items-center justify-center space-x-2 active:scale-[0.98]"
+                className="px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 text-center shadow-md shadow-busec-yellow/15 flex items-center justify-center space-x-2 active:scale-[0.98]"
               >
                 <span>Join Busec</span>
                 <ArrowRight className="w-4 h-4" />
@@ -250,47 +270,53 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {builderStories.map((story, idx) => (
-              <div
-                key={story.id}
-                className="group rounded-2xl overflow-hidden bg-white border border-slate-155 card-shadow hover:border-slate-200 hover:-translate-y-1 transition-all duration-200 flex flex-col md:flex-row h-full"
-              >
-                <div className="md:w-2/5 relative aspect-video md:aspect-auto min-h-[200px] overflow-hidden bg-slate-100">
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6 md:p-8 md:w-3/5 flex flex-col justify-between space-y-6">
-                  <div>
-                    <div className="flex items-center space-x-2 text-[9px] font-bold text-slate-450 uppercase tracking-wider mb-2">
-                      <span>{story.category}</span>
-                      <span>•</span>
-                      <span>{story.date}</span>
-                    </div>
-                    <h3 className="font-display font-bold text-base text-slate-800 group-hover:text-busec-blue transition-colors duration-200 leading-snug">
-                      {story.title}
-                    </h3>
-                    <p className="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed font-light">
-                      {story.excerpt}
-                    </p>
+            {stories.length > 0 ? (
+              stories.map((story, idx) => (
+                <div
+                  key={story.id}
+                  className="group rounded-2xl overflow-hidden bg-white border border-slate-155 card-shadow hover:border-slate-200 hover:-translate-y-1 transition-all duration-200 flex flex-col md:flex-row h-full"
+                >
+                  <div className="md:w-2/5 relative aspect-video md:aspect-auto min-h-[200px] overflow-hidden bg-slate-100">
+                    <img
+                      src={story.image}
+                      alt={story.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    />
                   </div>
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-850">{story.founder}</span>
-                      <span className="text-[10px] text-slate-500 font-light">Founder, {story.company}</span>
+                  <div className="p-6 md:p-8 md:w-3/5 flex flex-col justify-between space-y-6">
+                    <div>
+                      <div className="flex items-center space-x-2 text-[9px] font-bold text-slate-450 uppercase tracking-wider mb-2">
+                        <span>{story.category}</span>
+                        <span>•</span>
+                        <span>{story.date}</span>
+                      </div>
+                      <h3 className="font-display font-bold text-base text-slate-800 group-hover:text-busec-blue transition-colors duration-200 leading-snug">
+                        {story.title}
+                      </h3>
+                      <p className="text-xs text-slate-505 mt-2 line-clamp-3 leading-relaxed font-light">
+                        {story.excerpt}
+                      </p>
                     </div>
-                    <Link
-                      href={`/stories#${story.id}`}
-                      className="p-2.5 rounded-lg bg-busec-blue/5 hover:bg-busec-yellow hover:text-busec-navy text-busec-blue transition-all duration-200"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-slate-855">{story.founder}</span>
+                        <span className="text-[10px] text-slate-500 font-light">Founder, {story.company}</span>
+                      </div>
+                      <Link
+                        href={`/stories#${story.id}`}
+                        className="p-2.5 rounded-lg bg-busec-blue/5 hover:bg-busec-yellow hover:text-busec-navy text-busec-blue transition-all duration-200"
+                      >
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-12 bg-slate-50 border border-slate-150 rounded-2xl">
+                <p className="text-xs text-slate-500 font-light">No builder stories published yet.</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -364,14 +390,16 @@ export default function Home() {
 
       {/* Partners & Sponsors Logo Wall */}
       <section className="py-16 bg-slate-50 border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 md:px-8 text-center">
-          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block mb-10">Backed by leading organizations</span>
-          <div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 opacity-60 grayscale hover:opacity-85 transition-opacity duration-300">
-            <span className="font-display font-extrabold text-base sm:text-lg text-slate-700 tracking-widest">PAYSTACK</span>
-            <span className="font-display font-extrabold text-base sm:text-lg text-slate-700 tracking-widest">FLUTTERWAVE</span>
-            <span className="font-display font-extrabold text-base sm:text-lg text-slate-700 tracking-widest">PIGGYVEST</span>
-            <span className="font-display font-extrabold text-base sm:text-lg text-slate-700 tracking-widest">MONIEPOINT</span>
-            <span className="font-display font-extrabold text-base sm:text-lg text-slate-700 tracking-widest">BAMBOO</span>
+        <div className="max-w-7xl mx-auto px-6 md:px-8 text-center space-y-6">
+          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Our Sponsor</span>
+          <div className="flex justify-center items-center">
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-black p-4 hover:scale-[1.02] transition-transform duration-300">
+              <img
+                src="/images/sponsors/gadget-cartel.png"
+                alt="Gadget Cartel"
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -389,7 +417,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <Link
               href="/join"
-              className="w-full sm:w-auto px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 shadow-md shadow-busec-yellow/10 active:scale-[0.98]"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 shadow-md shadow-busec-yellow/10 active:scale-[0.98]"
             >
               Join BUSEC Now
             </Link>

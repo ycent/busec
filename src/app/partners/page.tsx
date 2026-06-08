@@ -17,7 +17,7 @@ export default function Partners() {
         "Direct access to top student engineering and business graduates",
         "Co-branded incubation sprints and developer workshops"
       ],
-      color: "border-busec-yellow bg-busec-yellow/10",
+      color: "border-busec-blue bg-busec-yellow/10",
       badge: "Highest Tier"
     },
     {
@@ -240,7 +240,7 @@ export default function Partners() {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
+                className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
               >
                 <span>Submit Partnership Proposal</span>
                 <Send className="w-4 h-4" />

@@ -78,17 +78,17 @@ export default function JoinBusec() {
           {/* Progress Indicators */}
           <div className="flex items-center justify-between mb-12 max-w-md mx-auto">
             <div className="flex flex-col items-center space-y-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 ${step >= 1 ? "bg-busec-yellow text-busec-navy" : "bg-slate-100 text-slate-400"}`}>1</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 border ${step >= 1 ? "bg-busec-yellow text-busec-navy border-busec-blue" : "bg-slate-100 text-slate-400 border-transparent"}`}>1</div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Application</span>
             </div>
             <div className="h-0.5 w-16 bg-slate-200 flex-1 mx-2"></div>
             <div className="flex flex-col items-center space-y-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 ${step >= 2 ? "bg-busec-yellow text-busec-navy" : "bg-slate-100 text-slate-400"}`}>2</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 border ${step >= 2 ? "bg-busec-yellow text-busec-navy border-busec-blue" : "bg-slate-100 text-slate-400 border-transparent"}`}>2</div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Dues Payment</span>
             </div>
             <div className="h-0.5 w-16 bg-slate-200 flex-1 mx-2"></div>
             <div className="flex flex-col items-center space-y-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 ${step >= 3 ? "bg-busec-yellow text-busec-navy" : "bg-slate-100 text-slate-400"}`}>3</div>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-200 border ${step >= 3 ? "bg-busec-yellow text-busec-navy border-busec-blue" : "bg-slate-100 text-slate-400 border-transparent"}`}>3</div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Confirmation</span>
             </div>
           </div>
@@ -213,7 +213,7 @@ export default function JoinBusec() {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/15"
+                className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/15"
               >
                 <span>Proceed to Membership Dues</span>
                 <ArrowRight className="w-4 h-4" />
@@ -323,7 +323,7 @@ export default function JoinBusec() {
                   });
                   setStep(1);
                 }}
-                className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
+                className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
               >
                 Register Another Candidate
               </button>

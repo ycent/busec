@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { galleryAlbums, GalleryAlbum } from "@/lib/mockData";
 import { Film, X, ZoomIn } from "lucide-react";
+import Image from "next/image";
 
 const initialCategories = [
   "All",
@@ -29,10 +30,19 @@ export default function Gallery() {
       currentAlbums = JSON.parse(storedAlbums);
       let modified = false;
       galleryAlbums.forEach(staticAlbum => {
-        const exists = currentAlbums.some(a => a.id === staticAlbum.id);
-        if (!exists) {
+        const idx = currentAlbums.findIndex(a => a.id === staticAlbum.id);
+        if (idx === -1) {
           currentAlbums.push(staticAlbum);
           modified = true;
+        } else {
+          // If the static data changed, refresh it in storage
+          if (
+            JSON.stringify(currentAlbums[idx].images) !== JSON.stringify(staticAlbum.images) ||
+            currentAlbums[idx].coverImage !== staticAlbum.coverImage
+          ) {
+            currentAlbums[idx] = staticAlbum;
+            modified = true;
+          }
         }
       });
       if (modified) {
@@ -94,7 +104,7 @@ export default function Gallery() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
                   selectedCategory === cat
-                    ? "bg-busec-yellow text-busec-navy shadow-md shadow-busec-yellow/15 scale-[1.02]"
+                    ? "bg-busec-yellow text-busec-navy border border-busec-blue shadow-md shadow-busec-yellow/15 scale-[1.02]"
                     : "bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-busec-blue"
                 }`}
               >
@@ -112,10 +122,15 @@ export default function Gallery() {
                   onClick={() => setActiveImage(media.url)}
                   className="break-inside-avoid relative group rounded-xl overflow-hidden mb-2 cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-0.5 bg-slate-900"
                 >
-                  <img
+                  <Image
                     src={media.url}
                     alt={media.albumTitle}
-                    className="w-full h-auto object-cover group-hover:scale-105 transition-all duration-500 ease-out opacity-90 group-hover:opacity-100"
+                    width={500}
+                    height={350}
+                    style={{ width: '100%', height: 'auto' }}
+                    className="object-cover group-hover:scale-105 transition-all duration-500 ease-out opacity-90 group-hover:opacity-100"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                     <span className="text-[10px] font-bold text-busec-yellow uppercase tracking-widest translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
@@ -154,9 +169,12 @@ export default function Gallery() {
             <X className="w-6 h-6" />
           </button>
           <div className="relative max-w-5xl max-h-[85vh] w-full h-full flex items-center justify-center">
-            <img
+            <Image
               src={activeImage}
               alt="Ecosystem moment enlarged"
+              width={1200}
+              height={800}
+              unoptimized
               className="max-w-full max-h-full object-contain rounded-xl shadow-2xl border border-white/10"
               onClick={(e) => e.stopPropagation()}
             />

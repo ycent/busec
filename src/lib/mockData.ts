@@ -216,37 +216,89 @@ export const bewEditions: BEWEdition[] = [
   }
 ];
 
-export const currentExecutives: Executive[] = [
-  {
-    name: "Habeeb Muhammed",
-    role: "President",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400",
-    bio: "Habeeb is a 400L Software Engineering student with experience building and scaling developer utilities. He leads BUSEC's vision of becoming Africa's premium student builder ecosystem.",
-    linkedin: "https://linkedin.com/in/habeeb-muhammed",
-    tenure: "2026/2027"
-  },
-  {
-    name: "Esther Omosehin",
-    role: "Vice President",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400",
-    bio: "Esther is an Accounting major passionate about venture building and financial technology. She directs BUSEC's external relations, treasury management, and corporate sponsorships.",
-    linkedin: "https://linkedin.com/in/esther-omosehin",
-    tenure: "2026/2027"
-  },
-  {
-    name: "Julian Akpesiri",
-    role: "Technical Director",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400",
-    bio: "Julian is a full-stack engineer and a community builder. He runs BUSEC's digital platforms, student business databases, and leads developer mentorship initiatives.",
-    linkedin: "https://linkedin.com/in/julian-akpesiri",
-    tenure: "2026/2027"
-  }
-];
+export const executives26_27: Executive[] = [];
 
-export const pastExecutives: PastExecutive[] = [
-  { name: "Chidiebere Ejikonye", role: "President", tenure: "2025/2026", company: "Software Engineer at Moniepoint" },
-  { name: "Samuel Oguntoye", role: "Vice President", tenure: "2025/2026", company: "Product Manager at Paystack" },
-  { name: "Maro Athora", role: "General Secretary", tenure: "2024/2025", company: "Founder at ArtLink" }
+export const executives25_26: Executive[] = [
+  {
+    name: "Otun Hamed",
+    role: "President",
+    image: "/images/executives/hamed-otun.jpg",
+    bio: "Hamed provided executive leadership and strategic direction for BUSEC during the 2025/2026 tenure, fostering key startup ecosystems and accelerating student-led projects.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Ikhalea Paul Oluwatofunmi",
+    role: "Vice President",
+    image: "/images/executives/paul-ikhalea.jpg",
+    bio: "Paul co-directed BUSEC operations and headed external communications, corporate sponsorships, and university relations to expand the club's impact.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Ikejiaku Munachimso",
+    role: "Vice President [Iperu Campus]",
+    image: "/images/executives/munachimso-ikejiaku.jpg",
+    bio: "Munachimso managed the Iperu campus division, coordinating local workshops, incubation projects, and developer guilds for student builders.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Arigbede Faith Atinuke",
+    role: "General Secretary",
+    image: "/images/executives/faith-arigbede.jpg",
+    bio: "Faith directed internal administration, meeting archives, and member registration flows, ensuring smooth coordination across all departments.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Adagboyi Elizabeth Monica",
+    role: "Treasurer",
+    image: "/images/executives/monica-adagboyi.jpg",
+    bio: "Monica managed BUSEC's budgets, event funding pools, financial audits, and coordinated payments for student incubation activities.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Upah Paul",
+    role: "Dir. of Public Relations",
+    image: "/images/executives/paul-upah.jpg",
+    bio: "Paul led BUSEC's media outreach, brand representation, public announcements, and press communications across Babcock University.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Sodolamu Oluwaseyifunmi Sharon",
+    role: "Protocol Officer",
+    image: "/images/executives/sharon-sodolamu.jpg",
+    bio: "Sharon coordinated logistics, speaker hosting, event protocols, and VIP guest relations for all BUSEC flagship summits.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Adeleke Ori-ofe Hephzibah",
+    role: "Dir. of Welfare",
+    image: "/images/executives/hephzibah-adeleke.jpg",
+    bio: "Hephzibah managed club welfare, member support programs, and local logistics for all active BUSEC coordinators and executives.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Molade Dorcas Monijesu",
+    role: "Chaplain",
+    image: "/images/executives/dorcas-molade.jpg",
+    bio: "Dorcas coordinated spiritual guidance, ethical leadership, and member welfare, keeping the executive team aligned with core campus principles.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  },
+  {
+    name: "Ovili Daniel Chukwuneku",
+    role: "Media and Communications Manager",
+    image: "/images/executives/daniel-ovili.jpg",
+    bio: "Daniel led visual brand assets, video shoots, graphic design, and social media campaigns for all flagship BUSEC programs.",
+    linkedin: "https://linkedin.com",
+    tenure: "2025/2026"
+  }
 ];
 
 export const resourcesList: Resource[] = [
@@ -268,30 +320,8 @@ export const studentBusinesses: StudentBusiness[] = [
   { id: "biz-3", name: "ArtLink", founder: "Maro Athora", industry: "Creative Marketplace", description: "Connecting student designers, artists, and illustrators to commercial gigs.", logo: "AL", socials: { instagram: "@artlink_hq" } }
 ];
 
-export const builderStories: BuilderStory[] = [
-  {
-    id: "story-1",
-    title: "Building DuesPay: How We Handled ₦2M in Campus Transactions",
-    founder: "Esther Omosehin",
-    company: "DuesPay",
-    excerpt: "We built a simple payment link dashboard to solve accounting nightmares for the Babcock Tax Club, and ended up processing fees for 15+ student associations.",
-    content: "When I was elected as the Treasurer of the Tax Club, I spent two weeks manually cross-referencing bank statements, WhatsApp receipt photos, and physical student matric logs. It was a nightmare. I called Julian, our tech director, and said 'We need to build a payment receipt verifier.' That weekend, we wired a Next.js frontend to a Paystack API endpoint. By Monday, we went live. Over the next month, 4 other departments requested the same tool. That is how DuesPay was born. In under one semester, we handled over 2 million Naira in student transactions with zero chargebacks. We're now preparing to raise a pre-seed round.",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&q=80&w=800",
-    date: "May 25, 2027",
-    category: "Fintech"
-  },
-  {
-    id: "story-2",
-    title: "From Dorm Room to VC Pitch: The Journey of FarmLink",
-    founder: "Tobi Alao",
-    company: "FarmLink",
-    excerpt: "Winning BIC 7.0 gave us the capital to rent our first pickup truck. Today we transport 2 tons of cassava weekly from Ilishan to Lagos markets.",
-    content: "It started when I visited a local farm behind the Babcock campus for a agricultural study project. I saw bags of tomatoes rotting on the ground simply because the farmer couldn't find a driver to haul them to the Ilishan main market. Back in my room in Samuel Akande Hall, I wrote a basic algorithm matching available local transport drivers with farm harvesters. When we presented at the Babcock Innovation Challenge 7.0, the judges saw the real-world value immediately. Winning the 2.5 million Naira cash prize changed everything. We didn't buy fancy equipment; we rented a truck and paid drivers. Today, FarmLink helps 22 smallholder farmers earn a stable livelihood by providing direct links to major buyers.",
-    image: "https://images.unsplash.com/photo-1589923188900-85dae04000d9?auto=format&fit=crop&q=80&w=800",
-    date: "June 02, 2027",
-    category: "AgriTech"
-  }
-];
+import dynamicStories from "./builderStories.json";
+export const builderStories: BuilderStory[] = dynamicStories;
 
 export const galleryAlbums: GalleryAlbum[] = [
   {
@@ -437,5 +467,12 @@ export const galleryAlbums: GalleryAlbum[] = [
     category: "Workshops",
     coverImage: "/images/workshops/img-1.jpg",
     images: Array.from({ length: 22 }, (_, i) => `/images/workshops/img-${i + 1}.jpg`)
+  },
+  {
+    id: "album-executive-retreat",
+    title: "Executive Retreat",
+    category: "Executive Retreats",
+    coverImage: "/images/executive-retreat/img-1.jpg",
+    images: Array.from({ length: 12 }, (_, i) => `/images/executive-retreat/img-${i + 1}.jpg`)
   }
 ];

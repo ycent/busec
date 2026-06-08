@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { bicEditions as initialBic, BICEdition, bewEditions as initialBew, BEWEdition, galleryAlbums } from "@/lib/mockData";
+import { bicEditions as initialBic, BICEdition, bewEditions as initialBew, BEWEdition, galleryAlbums, builderStories } from "@/lib/mockData";
 import { Download, Plus, CheckCircle, XCircle, Database, Key, Copy, Check, Trash2, Image, Link2, Eye } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -25,6 +25,20 @@ export default function AdminDashboard() {
     driveUrl: ""
   });
   const [syncedAlbums, setSyncedAlbums] = useState<any[]>([]);
+
+  // Stories States
+  const [stories, setStories] = useState<any[]>([]);
+  const [editingStoryId, setEditingStoryId] = useState<string | null>(null);
+  const [storyForm, setStoryForm] = useState({
+    title: "",
+    founder: "",
+    company: "",
+    excerpt: "",
+    content: "",
+    image: "",
+    category: "Startup Profile",
+    date: ""
+  });
   const [syncLoading, setSyncLoading] = useState(false);
   const [syncError, setSyncError] = useState("");
   const [selectedAlbumId, setSelectedAlbumId] = useState<string | null>(null);
@@ -185,16 +199,46 @@ CREATE TABLE bew_editions (
       setShowcaseForm(JSON.parse(storedShowcase));
     }
 
+    const storedStories = localStorage.getItem("busec_builder_stories");
+    if (storedStories) {
+      const parsed = JSON.parse(storedStories);
+      if (parsed.length === 0 && builderStories.length > 0) {
+        setStories(builderStories);
+        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+      } else {
+        setStories(parsed);
+        // Auto sync to backend if localStorage differs from the file
+        if (JSON.stringify(parsed) !== JSON.stringify(builderStories)) {
+          saveStoriesToBackend(parsed);
+        }
+      }
+    } else {
+      localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+      setStories(builderStories);
+      if (builderStories.length > 0) {
+        saveStoriesToBackend(builderStories);
+      }
+    }
+
     const storedGallery = localStorage.getItem("busec_gallery_albums");
     let currentGallery: any[] = [];
     if (storedGallery) {
       currentGallery = JSON.parse(storedGallery);
       let modified = false;
       galleryAlbums.forEach(staticAlbum => {
-        const exists = currentGallery.some(a => a.id === staticAlbum.id);
-        if (!exists) {
+        const idx = currentGallery.findIndex(a => a.id === staticAlbum.id);
+        if (idx === -1) {
           currentGallery.push(staticAlbum);
           modified = true;
+        } else {
+          // If the static data changed, refresh it in storage
+          if (
+            JSON.stringify(currentGallery[idx].images) !== JSON.stringify(staticAlbum.images) ||
+            currentGallery[idx].coverImage !== staticAlbum.coverImage
+          ) {
+            currentGallery[idx] = staticAlbum;
+            modified = true;
+          }
         }
       });
       if (modified) {
@@ -299,6 +343,108 @@ CREATE TABLE bew_editions (
       });
       setSyncedAlbums(updated);
       localStorage.setItem("busec_gallery_albums", JSON.stringify(updated));
+    }
+  };
+
+  const saveStoriesToBackend = async (updatedStories: any[]) => {
+    try {
+      await fetch("/api/stories/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stories: updatedStories })
+      });
+    } catch (err) {
+      console.error("Failed to sync stories to filesystem:", err);
+    }
+  };
+
+  const handleSaveStory = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!storyForm.title || !storyForm.founder || !storyForm.company || !storyForm.content || !storyForm.image) {
+      alert("Please fill out all required fields.");
+      return;
+    }
+
+    let updated: any[] = [];
+    if (editingStoryId) {
+      updated = stories.map(story => story.id === editingStoryId ? {
+        ...story,
+        title: storyForm.title,
+        founder: storyForm.founder,
+        company: storyForm.company,
+        excerpt: storyForm.excerpt || storyForm.content.slice(0, 120) + "...",
+        content: storyForm.content,
+        image: storyForm.image,
+        category: storyForm.category,
+        date: storyForm.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+      } : story);
+      setEditingStoryId(null);
+      alert("Story updated successfully!");
+    } else {
+      const newStory = {
+        id: "story-" + Date.now(),
+        title: storyForm.title,
+        founder: storyForm.founder,
+        company: storyForm.company,
+        excerpt: storyForm.excerpt || storyForm.content.slice(0, 120) + "...",
+        content: storyForm.content,
+        image: storyForm.image,
+        category: storyForm.category,
+        date: storyForm.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+      };
+      updated = [newStory, ...stories];
+      alert("Story added successfully!");
+    }
+
+    setStories(updated);
+    localStorage.setItem("busec_builder_stories", JSON.stringify(updated));
+    saveStoriesToBackend(updated);
+
+    setStoryForm({
+      title: "",
+      founder: "",
+      company: "",
+      excerpt: "",
+      content: "",
+      image: "",
+      category: "Startup Profile",
+      date: ""
+    });
+  };
+
+  const handleEditStory = (story: any) => {
+    setEditingStoryId(story.id);
+    setStoryForm({
+      title: story.title,
+      founder: story.founder,
+      company: story.company,
+      excerpt: story.excerpt,
+      content: story.content,
+      image: story.image,
+      category: story.category,
+      date: story.date
+    });
+  };
+
+  const handleDeleteStory = (storyId: string) => {
+    if (confirm("Are you sure you want to delete this story?")) {
+      const updated = stories.filter(story => story.id !== storyId);
+      setStories(updated);
+      localStorage.setItem("busec_builder_stories", JSON.stringify(updated));
+      saveStoriesToBackend(updated);
+      if (editingStoryId === storyId) {
+        setEditingStoryId(null);
+        setStoryForm({
+          title: "",
+          founder: "",
+          company: "",
+          excerpt: "",
+          content: "",
+          image: "",
+          category: "Startup Profile",
+          date: ""
+        });
+      }
     }
   };
 
@@ -445,7 +591,7 @@ CREATE TABLE bew_editions (
 
               <button
                 type="submit"
-                className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
+                className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
               >
                 Unlock Dashboard
               </button>
@@ -541,6 +687,14 @@ CREATE TABLE bew_editions (
               }`}
             >
               Configure Gallery
+            </button>
+            <button
+              onClick={() => setActiveTab("stories")}
+              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold transition-all ${
+                activeTab === "stories" ? "bg-busec-blue text-white shadow-sm" : "text-slate-655 hover:bg-slate-50 hover:text-busec-blue"
+              }`}
+            >
+              Configure Stories
             </button>
             <button
               onClick={() => setActiveTab("schema")}
@@ -722,7 +876,7 @@ CREATE TABLE bew_editions (
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
+                    className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Launch BIC Cycle</span>
@@ -792,7 +946,7 @@ CREATE TABLE bew_editions (
 
                   <button
                     type="submit"
-                    className="w-full py-4 bg-busec-yellow text-busec-navy font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
+                    className="w-full py-4 bg-busec-yellow text-busec-navy border border-busec-blue font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-1.5 hover:bg-busec-navy hover:text-white transition-all shadow-md shadow-busec-yellow/10"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Launch BEW Summit</span>
@@ -1047,6 +1201,199 @@ CREATE TABLE bew_editions (
                     </div>
                   ) : (
                     <p className="text-xs text-slate-455 italic font-light">No gallery albums available yet.</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* TAB: Configure Stories */}
+            {activeTab === "stories" && (
+              <div className="space-y-8 animate-in fade-in duration-200">
+                <div className="border-b border-slate-200 pb-4">
+                  <h3 className="font-display font-bold text-xl text-slate-850">
+                    {editingStoryId ? "Edit Builder Story" : "Create Builder Story"}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-light mt-1">
+                    Publish profiles of student founders, developer sprint winners, and alumni entrepreneurs.
+                  </p>
+                </div>
+
+                <form onSubmit={handleSaveStory} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Story Title</label>
+                      <input
+                        type="text"
+                        required
+                        value={storyForm.title}
+                        onChange={(e) => setStoryForm({ ...storyForm, title: e.target.value })}
+                        placeholder="e.g. Scaling FarmLink: From 100L Coding to N2.5M Seed Capital"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Founder Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={storyForm.founder}
+                        onChange={(e) => setStoryForm({ ...storyForm, founder: e.target.value })}
+                        placeholder="e.g. Tobi Alao"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Company / Venture Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={storyForm.company}
+                        onChange={(e) => setStoryForm({ ...storyForm, company: e.target.value })}
+                        placeholder="e.g. FarmLink"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Category</label>
+                      <select
+                        value={storyForm.category}
+                        onChange={(e) => setStoryForm({ ...storyForm, category: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      >
+                        <option value="Startup Profile">Startup Profile</option>
+                        <option value="Tech Sprint">Tech Sprint</option>
+                        <option value="Alumni Profile">Alumni Profile</option>
+                        <option value="Case Study">Case Study</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Date</label>
+                      <input
+                        type="text"
+                        value={storyForm.date}
+                        onChange={(e) => setStoryForm({ ...storyForm, date: e.target.value })}
+                        placeholder="e.g. June 12, 2027 (Leave blank for current date)"
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Featured Image URL</label>
+                      <input
+                        type="text"
+                        required
+                        value={storyForm.image}
+                        onChange={(e) => setStoryForm({ ...storyForm, image: e.target.value })}
+                        placeholder="e.g. https://images.unsplash.com/photo-..."
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Short Excerpt (Optional)</label>
+                      <input
+                        type="text"
+                        value={storyForm.excerpt}
+                        onChange={(e) => setStoryForm({ ...storyForm, excerpt: e.target.value })}
+                        placeholder="Brief summary sentence..."
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-busec-blue"
+                      />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Story Content</label>
+                      <textarea
+                        required
+                        rows={8}
+                        value={storyForm.content}
+                        onChange={(e) => setStoryForm({ ...storyForm, content: e.target.value })}
+                        placeholder="Write the full long-form article details..."
+                        className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-850 focus:outline-none focus:border-busec-blue resize-none whitespace-pre-wrap"
+                      ></textarea>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end space-x-3">
+                    {editingStoryId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingStoryId(null);
+                          setStoryForm({
+                            title: "",
+                            founder: "",
+                            company: "",
+                            excerpt: "",
+                            content: "",
+                            image: "",
+                            category: "Startup Profile",
+                            date: ""
+                          });
+                        }}
+                        className="px-5 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-xl transition-all"
+                      >
+                        Cancel Edit
+                      </button>
+                    )}
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-busec-blue hover:bg-busec-navy text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-md shadow-busec-blue/15"
+                    >
+                      {editingStoryId ? "Update Story" : "Publish Story"}
+                    </button>
+                  </div>
+                </form>
+
+                {/* Published Stories Table */}
+                <div className="border-t border-slate-200 pt-8 space-y-4">
+                  <h4 className="font-display font-bold text-sm text-slate-850">Published Stories ({stories.length})</h4>
+                  {stories.length > 0 ? (
+                    <div className="overflow-x-auto border border-slate-150 rounded-2xl bg-white shadow-sm">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-slate-100 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                          <tr>
+                            <th className="p-4">Title</th>
+                            <th className="p-4">Founder / Venture</th>
+                            <th className="p-4">Category</th>
+                            <th className="p-4">Date</th>
+                            <th className="p-4 text-center">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-700 font-light">
+                          {stories.map((story) => (
+                            <tr key={story.id} className="hover:bg-slate-50/30 transition-colors">
+                              <td className="p-4 font-semibold text-slate-850 max-w-xs truncate">{story.title}</td>
+                              <td className="p-4">
+                                <div className="font-semibold text-slate-800">{story.founder}</div>
+                                <div className="text-[10px] text-slate-455">{story.company}</div>
+                              </td>
+                              <td className="p-4 text-slate-600">{story.category}</td>
+                              <td className="p-4 text-slate-500">{story.date}</td>
+                              <td className="p-4 text-center space-x-2">
+                                <button
+                                  onClick={() => handleEditStory(story)}
+                                  className="px-2.5 py-1.5 bg-busec-blue/5 hover:bg-busec-blue hover:text-white border border-busec-blue/15 text-busec-blue rounded-lg text-[10px] font-bold transition-all cursor-pointer"
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteStory(story.id)}
+                                  className="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-600 hover:text-white border border-rose-100 text-rose-600 rounded-lg text-[10px] font-bold transition-all cursor-pointer"
+                                >
+                                  Delete
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-455 italic font-light">No published stories available yet.</p>
                   )}
                 </div>
               </div>

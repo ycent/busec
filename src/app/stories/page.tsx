@@ -1,12 +1,37 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { builderStories } from "@/lib/mockData";
-import { ArrowRight, Calendar, Tag } from "lucide-react";
+import { builderStories, BuilderStory } from "@/lib/mockData";
+import { ArrowRight, Calendar, Tag, FileText } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function BuilderStories() {
+  const [stories, setStories] = useState<BuilderStory[]>([]);
+
+  useEffect(() => {
+    const storedStories = localStorage.getItem("busec_builder_stories");
+    if (storedStories) {
+      const parsed = JSON.parse(storedStories);
+      setStories(parsed);
+      // Auto sync to backend if localStorage differs from the file
+      if (JSON.stringify(parsed) !== JSON.stringify(builderStories)) {
+        fetch("/api/stories/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ stories: parsed })
+        }).catch(err => console.error("Sync error:", err));
+      }
+    } else {
+      setStories(builderStories);
+      if (builderStories.length > 0) {
+        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+      }
+    }
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -27,70 +52,82 @@ export default function BuilderStories() {
       {/* Editorial Long-Form Section */}
       <section className="pt-10 pb-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-24">
-          {builderStories.map((story, idx) => {
-            const isEven = idx % 2 === 0;
-            return (
-              <div
-                key={story.id}
-                id={story.id}
-                className={`flex flex-col lg:flex-row items-center gap-12 border-b border-slate-100 pb-16 last:border-0 last:pb-0 scroll-mt-28 ${
-                  isEven ? "" : "lg:flex-row-reverse"
-                }`}
-              >
-                {/* Large Editorial Image */}
-                <div className="w-full lg:w-1/2 relative aspect-video rounded-3xl overflow-hidden shadow-sm border border-slate-150 bg-slate-50">
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    className="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Long-Form Text Content */}
-                <div className="w-full lg:w-1/2 space-y-6">
-                  <div className="flex items-center space-x-3.5 text-xs text-slate-500 uppercase tracking-widest font-bold">
-                    <span className="flex items-center space-x-1">
-                      <Tag className="w-3.5 h-3.5 text-busec-blue" />
-                      <span>{story.category}</span>
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center space-x-1">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{story.date}</span>
-                    </span>
+          {stories.length > 0 ? (
+            stories.map((story, idx) => {
+              const isEven = idx % 2 === 0;
+              return (
+                <div
+                  key={story.id}
+                  id={story.id}
+                  className={`flex flex-col lg:flex-row items-center gap-12 border-b border-slate-100 pb-16 last:border-0 last:pb-0 scroll-mt-28 ${
+                    isEven ? "" : "lg:flex-row-reverse"
+                  }`}
+                >
+                  {/* Large Editorial Image */}
+                  <div className="w-full lg:w-1/2 relative aspect-video rounded-3xl overflow-hidden shadow-sm border border-slate-150 bg-slate-50">
+                    <img
+                      src={story.image}
+                      alt={story.title}
+                      className="w-full h-full object-cover hover:scale-[1.01] transition-transform duration-500"
+                    />
                   </div>
 
-                  <h2 className="font-display font-black text-2xl sm:text-3xl text-slate-800 tracking-tight leading-tight">
-                    {story.title}
-                  </h2>
-
-                  <div className="flex items-center space-x-3 pb-2 border-b border-slate-100">
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-display font-bold text-slate-700 text-xs">
-                      {story.founder[0]}
+                  {/* Long-Form Text Content */}
+                  <div className="w-full lg:w-1/2 space-y-6">
+                    <div className="flex items-center space-x-3.5 text-xs text-slate-500 uppercase tracking-widest font-bold">
+                      <span className="flex items-center space-x-1">
+                        <Tag className="w-3.5 h-3.5 text-busec-blue" />
+                        <span>{story.category}</span>
+                      </span>
+                      <span>•</span>
+                      <span className="flex items-center space-x-1">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{story.date}</span>
+                      </span>
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-800">{story.founder}</span>
-                      <span className="text-[10px] text-slate-450 uppercase tracking-wider font-semibold">Founder, {story.company}</span>
+
+                    <h2 className="font-display font-black text-2xl sm:text-3xl text-slate-800 tracking-tight leading-tight">
+                      {story.title}
+                    </h2>
+
+                    <div className="flex items-center space-x-3 pb-2 border-b border-slate-100">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-display font-bold text-slate-700 text-xs">
+                        {story.founder[0]}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-bold text-slate-800">{story.founder}</span>
+                        <span className="text-[10px] text-slate-455 uppercase tracking-wider font-semibold">Founder, {story.company}</span>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-light whitespace-pre-wrap">
+                      {story.content}
+                    </p>
+
+                    <div className="pt-2">
+                      <Link
+                        href="/join"
+                        className="inline-flex items-center space-x-2 text-xs font-bold text-busec-blue hover:underline"
+                      >
+                        <span>Join BUSEC to connect with {story.founder}</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
                     </div>
                   </div>
-
-                  <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-light">
-                    {story.content}
-                  </p>
-
-                  <div className="pt-2">
-                    <Link
-                      href="/join"
-                      className="inline-flex items-center space-x-2 text-xs font-bold text-busec-blue hover:underline"
-                    >
-                      <span>Join BUSEC to connect with {story.founder}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
                 </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-20 bg-slate-50 border border-slate-150 rounded-3xl max-w-xl mx-auto space-y-3">
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                <FileText className="w-6 h-6" />
               </div>
-            );
-          })}
+              <h3 className="font-display font-bold text-slate-700 text-lg">No builder stories published yet</h3>
+              <p className="text-xs text-slate-500 font-light max-w-sm mx-auto leading-relaxed">
+                Check back soon for long-form editorial profiles on student founders and software builders. Admin users can post new stories from the admin dashboard.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -99,10 +136,10 @@ export default function BuilderStories() {
         <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
           <span className="text-4xl text-busec-blue/40 block">“</span>
           <blockquote className="font-display font-semibold text-lg sm:text-xl text-slate-700 leading-relaxed">
-            The Babcock Innovation Challenge taught us that capital matters, but team building and customer interaction are the real core of campus venture development.
+            A university degree may open doors, but an entrepreneurial mindset gives you the courage to build your own.
           </blockquote>
           <cite className="block text-xs font-bold uppercase tracking-widest text-slate-400 not-italic">
-            — Maro Athora, Founder of ArtLink (Alumni 2025)
+            — Hamed Otun, President, Babcock University Students' Entrepreneurship Club (BUSEC), 2025/2026
           </cite>
         </div>
       </section>

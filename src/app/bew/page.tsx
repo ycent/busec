@@ -57,7 +57,7 @@ export default function BewPlatform() {
                 onClick={() => setSelectedIdx(idx)}
                 className={`px-6 py-3 rounded-xl text-xs font-bold tracking-widest uppercase transition-all duration-200 flex-shrink-0 cursor-pointer ${
                   selectedIdx === idx
-                    ? "bg-busec-yellow text-busec-navy shadow-md shadow-busec-yellow/15 scale-[1.02]"
+                    ? "bg-busec-yellow text-busec-navy border border-busec-blue shadow-md shadow-busec-yellow/15 scale-[1.02]"
                     : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 hover:text-busec-blue"
                 }`}
               >
