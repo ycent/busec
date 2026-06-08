@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { executives25_26, executives26_27 } from "@/lib/mockData";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 export default function Executives() {
   const [activeTenure, setActiveTenure] = useState<"25'/26'" | "26'/27'">("25'/26'");
@@ -26,29 +27,20 @@ export default function Executives() {
             Meet the student executors driving BUSEC's operations, developer communities, event schedules, and corporate partnerships.
           </p>
 
-          {/* Tenure Toggle Buttons */}
+          {/* Tenure Select Dropdown */}
           <div className="flex justify-center pt-4">
-            <div className="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
-              <button
-                onClick={() => setActiveTenure("25'/26'")}
-                className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                  activeTenure === "25'/26'"
-                    ? "bg-white text-busec-navy shadow-sm"
-                    : "text-slate-500 hover:text-busec-navy"
-                }`}
+            <div className="relative w-64">
+              <select
+                value={activeTenure}
+                onChange={(e) => setActiveTenure(e.target.value as any)}
+                className="w-full bg-white text-slate-700 text-xs font-bold uppercase tracking-wider px-5 py-3.5 pr-12 rounded-xl border border-slate-200 shadow-sm focus:outline-none focus:border-busec-blue focus:ring-1 focus:ring-busec-blue transition-all cursor-pointer appearance-none"
               >
-                2025/2026 Tenure
-              </button>
-              <button
-                onClick={() => setActiveTenure("26'/27'")}
-                className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
-                  activeTenure === "26'/27'"
-                    ? "bg-white text-busec-navy shadow-sm"
-                    : "text-slate-500 hover:text-busec-navy"
-                }`}
-              >
-                2026/2027 Tenure
-              </button>
+                <option value="25'/26'">2025/2026 Tenure</option>
+                <option value="26'/27'">2026/2027 Tenure</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                <ChevronDown className="w-4 h-4" />
+              </div>
             </div>
           </div>
         </div>
@@ -71,7 +63,7 @@ export default function Executives() {
                         alt={exec.name}
                         width={400}
                         height={400}
-                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                        className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
                         priority={idx < 3}
                         loading={idx >= 3 ? "lazy" : undefined}
                       />
