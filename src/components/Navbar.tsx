@@ -48,143 +48,145 @@ export default function Navbar() {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "glass-light py-2 md:py-4 shadow-sm"
-          : "bg-white/80 backdrop-blur-md py-3 md:py-5 border-b border-slate-100"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300">
-              <img
-                src="/logo.jpg"
-                alt="BUSEC Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-display font-black tracking-tight text-xs md:text-sm text-busec-navy group-hover:text-busec-blue transition-colors duration-300 leading-none">
-                Babcock University Students’
-              </span>
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mt-0.5 leading-none">
-                Entrepreneurship Club
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center space-x-1">
-            <Link
-              href="/"
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
-                pathname === "/" ? "text-busec-blue" : "text-slate-650 hover:text-busec-blue"
-              }`}
-            >
-              Home
-            </Link>
-            <Link
-              href="/about"
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
-                pathname === "/about" ? "text-busec-blue" : "text-slate-650 hover:text-busec-blue"
-              }`}
-            >
-              About
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "glass-light py-2 md:py-4 shadow-sm"
+            : "bg-white/80 backdrop-blur-md py-3 md:py-5 border-b border-slate-100"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300">
+                <img
+                  src="/logo.jpg"
+                  alt="BUSEC Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display font-black tracking-tight text-xs md:text-sm text-busec-navy group-hover:text-busec-blue transition-colors duration-300 leading-none">
+                  Babcock University Students’
+                </span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mt-0.5 leading-none">
+                  Entrepreneurship Club
+                </span>
+              </div>
             </Link>
 
-            {/* Activities Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
-            >
-              <button
-                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 flex items-center space-x-1 ${
-                  pathname.startsWith("/activities") || pathname === "/bic" || pathname === "/bew"
-                    ? "text-busec-blue"
-                    : "text-slate-655 hover:text-busec-blue"
-                }`}
-              >
-                <span>Activities</span>
-                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
-              </button>
-
-              {dropdownOpen && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-96 rounded-2xl bg-white border border-slate-150 shadow-xl p-4 grid gap-2 grid-cols-1">
-                  <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2 mb-1">
-                    Featured Programs
-                  </div>
-                  {activitiesList.map((act) => {
-                    const Icon = act.icon;
-                    return (
-                      <Link
-                        key={act.name}
-                        href={act.href}
-                        className="flex items-start space-x-3.5 p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 group"
-                      >
-                        <div className="flex-shrink-0 mt-0.5 text-slate-400 group-hover:text-busec-blue transition-colors duration-200">
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-800 group-hover:text-busec-blue transition-colors duration-200">
-                            {act.name}
-                          </h4>
-                          <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1 font-light">
-                            {act.desc}
-                          </p>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                  <Link
-                    href="/activities"
-                    className="mt-2 text-center text-xs font-bold text-busec-blue hover:underline block pt-2 border-t border-slate-100"
-                  >
-                    View All Activities & Events
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {navLinks.slice(2).map((link) => (
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex items-center space-x-1">
               <Link
-                key={link.name}
-                href={link.href}
+                href="/"
                 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
-                  pathname === link.href ? "text-busec-blue" : "text-slate-650 hover:text-busec-blue"
+                  pathname === "/" ? "text-busec-blue" : "text-slate-655 hover:text-busec-blue"
                 }`}
               >
-                {link.name}
+                Home
               </Link>
-            ))}
+              <Link
+                href="/about"
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
+                  pathname === "/about" ? "text-busec-blue" : "text-slate-655 hover:text-busec-blue"
+                }`}
+              >
+                About
+              </Link>
 
-            <Link
-              href="/join"
-              className="ml-4 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/15 flex items-center space-x-1"
-            >
-              <span>Join BUSEC</span>
-            </Link>
-          </div>
+              {/* Activities Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <button
+                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 flex items-center space-x-1 ${
+                    pathname.startsWith("/activities") || pathname === "/bic" || pathname === "/bew"
+                      ? "text-busec-blue"
+                      : "text-slate-655 hover:text-busec-blue"
+                  }`}
+                >
+                  <span>Activities</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} />
+                </button>
 
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-busec-blue hover:bg-slate-50 transition-colors"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+                {dropdownOpen && (
+                  <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-96 rounded-2xl bg-white border border-slate-150 shadow-xl p-4 grid gap-2 grid-cols-1">
+                    <div className="px-3 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100 pb-2 mb-1">
+                      Featured Programs
+                    </div>
+                    {activitiesList.map((act) => {
+                      const Icon = act.icon;
+                      return (
+                        <Link
+                          key={act.name}
+                          href={act.href}
+                          className="flex items-start space-x-3.5 p-2 rounded-xl hover:bg-slate-50 transition-all duration-200 group"
+                        >
+                          <div className="flex-shrink-0 mt-0.5 text-slate-400 group-hover:text-busec-blue transition-colors duration-200">
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-800 group-hover:text-busec-blue transition-colors duration-200">
+                              {act.name}
+                            </h4>
+                            <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1 font-light">
+                              {act.desc}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                    <Link
+                      href="/activities"
+                      className="mt-2 text-center text-xs font-bold text-busec-blue hover:underline block pt-2 border-t border-slate-100"
+                    >
+                      View All Activities & Events
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {navLinks.slice(2).map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
+                    pathname === link.href ? "text-busec-blue" : "text-slate-655 hover:text-busec-blue"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+
+              <Link
+                href="/join"
+                className="ml-4 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 shadow-md shadow-busec-yellow/15 flex items-center space-x-1"
+              >
+                <span>Join BUSEC</span>
+              </Link>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-lg text-slate-600 hover:text-busec-blue hover:bg-slate-50 transition-colors"
+              >
+                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className={`lg:hidden fixed inset-0 ${scrolled ? "top-[65px]" : "top-[73px]"} z-40 bg-white border-t border-slate-100 flex flex-col justify-between p-6 animate-in slide-in-from-right duration-300`}>
-          <div className="flex flex-col space-y-2 overflow-y-auto max-h-[70vh] pr-2">
+        <div className="lg:hidden fixed inset-0 z-40 bg-white border-t border-slate-100 flex flex-col p-6 pt-24 space-y-6 overflow-y-auto animate-in slide-in-from-right duration-300">
+          <div className="flex flex-col space-y-2">
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
@@ -206,7 +208,7 @@ export default function Navbar() {
 
             {/* Mobile Activities Header */}
             <div className="p-3 border-y border-slate-100 my-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Activities</span>
+              <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block mb-3">Activities</span>
               <div className="grid grid-cols-1 gap-2.5">
                 {activitiesList.map((act) => (
                   <Link
@@ -236,7 +238,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="pt-6 border-t border-slate-100">
+          <div className="pt-4 pb-8">
             <Link
               href="/join"
               onClick={() => setIsOpen(false)}
@@ -247,6 +249,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-    </nav>
+    </>
   );
 }
