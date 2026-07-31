@@ -9,12 +9,12 @@ export default function ActivitiesPage() {
   const activities = [
     {
       id: "creative-summit",
-      title: "Creative Summit",
+      title: "Babcock Creative Summit",
       desc: "Our annual design and technical execution summit. We bring together student designers, engineers, copywriters, and marketers to showcase innovation and collaborate on digital product guilds."
     },
     {
       id: "workshops",
-      title: "Workshops & Technical Training Sprints",
+      title: "Babcock Student Entrepreneurship Conference",
       desc: "Bi-weekly practical labs teaching business models, market validation, UI/UX prototyping, Postgres databases, API engineering, and search optimization."
     },
     {
@@ -94,7 +94,7 @@ export default function ActivitiesPage() {
               href="/bew"
               className="px-8 py-4 rounded-xl text-xs font-bold bg-white border border-slate-200 text-busec-blue hover:bg-slate-100 transition-all duration-300 hover:-translate-y-0.5"
             >
-              Enter Entrepreneurship Week (BEW)
+              Enter Babcock Entrepreneurship Week (BEW)
             </Link>
           </div>
         </div>

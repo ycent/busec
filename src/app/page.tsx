@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Users, Briefcase, Calendar, Award } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { studentBusinesses, builderStories } from "@/lib/mockData";
@@ -65,38 +65,13 @@ export default function Home() {
     { value: "₦10M+", label: "Seed Grants Facilitated", desc: "Equity-free funding pools and corporate credits" }
   ];
 
-  const flagships = [
-    {
-      title: "Babcock Innovation Challenge (BIC)",
-      desc: "Our premier multi-week incubation program and pitch competition offering equity-free seed funding and professional mentorship.",
-      link: "/bic",
-      badge: "Flagship Accelerator"
-    },
-    {
-      title: "Entrepreneurship Week (BEW)",
-      desc: "An annual gathering featuring keynote addresses, expert panels, fireside chats, and product exhibitions by student founders.",
-      link: "/bew",
-      badge: "Annual Summit"
-    },
-    {
-      title: "Creative Summit",
-      desc: "Connecting tech builders, designers, and copywriters to showcase digital products and collaborate on development guilds.",
-      link: "/activities#creative-summit",
-      badge: "Innovation Showcase"
-    },
-    {
-      title: "Workshops & Training Sprints",
-      desc: "Hands-on sessions on business planning, product design, financial modeling, and engineering tools led by industry experts.",
-      link: "/activities#workshops",
-      badge: "Skills Sprints"
-    }
-  ];
+
 
   return (
     <>
       <Navbar />
       {/* Hero Section */}
-      <section className="relative pt-40 pb-24 overflow-hidden min-h-[90vh] flex items-center">
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden min-h-[85vh] flex items-center">
         {/* Background Slideshow */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           {heroImages.map((img, idx) => (
@@ -112,39 +87,25 @@ export default function Home() {
           <div className="absolute inset-0 bg-white/75 backdrop-blur-[1px]"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 md:px-8 z-10 space-y-16 flex flex-col items-center">
+        <div className="relative max-w-7xl mx-auto px-6 md:px-8 z-10 space-y-10 md:space-y-16 flex flex-col items-center">
           
           {/* Centered Hero Content */}
-          <div className="text-center max-w-4xl mx-auto space-y-8">
+          <div className="text-center max-w-4xl mx-auto space-y-6 md:space-y-8">
             <h1 className="font-display font-black text-4xl sm:text-5xl md:text-7xl text-busec-navy tracking-tight leading-[1.05] max-w-3xl mx-auto">
               Where Student Entrepreneurs Become <span className="text-busec-blue">Founders</span>.
             </h1>
             
-            <p className="text-base sm:text-lg text-slate-605 leading-relaxed max-w-2xl mx-auto font-light">
+            <p className="text-base sm:text-lg text-slate-655 leading-relaxed max-w-2xl mx-auto font-light">
               BUSEC equips Babcock University students with the validation, financing, mentor network, and peer support needed to build businesses that solve real problems.
             </p>
-
-            <div className="text-[10px] font-bold text-slate-450 uppercase tracking-widest flex items-center justify-center space-x-3">
-              <span>BABCOCK UNIVERSITY</span>
-              <span className="text-slate-300">•</span>
-              <span>LAUNCHPAD FOR BUILDERS</span>
-              <span className="text-slate-300">•</span>
-              <span>EST. 2021</span>
-            </div>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex justify-center pt-2">
               <Link
                 href="/join"
-                className="px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 text-center shadow-md shadow-busec-yellow/15 flex items-center justify-center space-x-2 active:scale-[0.98]"
+                className="px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white hover:-translate-y-1 transition-all duration-200 text-center shadow-md shadow-busec-yellow/15 flex items-center justify-center space-x-2 active:scale-[0.98] w-full sm:w-auto"
               >
                 <span>Join Busec</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/activities"
-                className="px-8 py-4 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-50 hover:bg-slate-100 hover:-translate-y-1 text-slate-700 transition-all duration-200 text-center border border-slate-150 flex items-center justify-center space-x-2 active:scale-[0.98]"
-              >
-                <span>Explore Activities</span>
               </Link>
             </div>
           </div>
@@ -179,77 +140,40 @@ export default function Home() {
       </section>
 
       {/* Impact Numbers Section */}
-      <section className="bg-slate-55 py-16 border-y border-slate-100">
+      <section className="bg-slate-50 py-12 md:py-16 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-            {impactCounters.map((counter, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col space-y-2 border-l-0 sm:border-l border-slate-200/80 pl-0 sm:pl-6 first:border-0 hover:scale-[1.02] transition-transform duration-200"
-              >
-                <span className="font-display font-black text-3xl sm:text-4xl text-busec-blue tracking-tight">
-                  {counter.value}
-                </span>
-                <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">
-                  {counter.label}
-                </span>
-                <span className="text-xs text-slate-500 leading-normal font-light">
-                  {counter.desc}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Flagship Programs Section */}
-      <section className="py-24 bg-white relative">
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mb-16 space-y-4">
-            <h2 className="font-display font-black text-3xl sm:text-4xl text-busec-navy tracking-tight">
-              Flagship Initiatives & Programs
-            </h2>
-            <p className="text-sm text-slate-655 leading-relaxed font-light">
-              We design and coordinate structured programs to support builders at every phase, from raw concept validation to marketplace operations.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {flagships.map((program, idx) => (
-              <div
-                key={idx}
-                className="p-8 rounded-2xl bg-white border border-slate-150 card-shadow hover:border-slate-250 hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-bold text-busec-blue uppercase tracking-widest bg-busec-blue/5 px-2.5 py-1 rounded-md">
-                      {program.badge}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+            {impactCounters.map((counter, idx) => {
+              const icons = [Users, Briefcase, Calendar, Award];
+              const Icon = icons[idx];
+              return (
+                <div
+                  key={idx}
+                  className="p-6 rounded-2xl bg-white border border-slate-150 card-shadow hover:-translate-y-1 hover:border-busec-blue/30 transition-all duration-300 flex flex-col space-y-3 group"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-busec-blue/5 flex items-center justify-center text-busec-blue group-hover:bg-busec-blue group-hover:text-white transition-colors duration-300">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <span className="font-display font-black text-2xl sm:text-3xl text-busec-navy tracking-tight block">
+                      {counter.value}
+                    </span>
+                    <span className="text-xs font-bold text-slate-800 uppercase tracking-wide block leading-none">
+                      {counter.label}
                     </span>
                   </div>
-                  <h3 className="font-display font-bold text-lg text-slate-850 mt-6 group-hover:text-busec-blue transition-colors duration-200">
-                    {program.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-3.5 leading-relaxed font-light">
-                    {program.desc}
+                  <p className="text-xs text-slate-500 leading-normal font-light">
+                    {counter.desc}
                   </p>
                 </div>
-                <div className="mt-8 pt-4 border-t border-slate-105">
-                  <Link
-                    href={program.link}
-                    className="inline-flex items-center space-x-1 text-xs font-bold text-busec-blue hover:underline"
-                  >
-                    <span>Explore this initiative</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Meet The Builders Section */}
-      <section className="py-24 bg-slate-50 relative border-t border-slate-100">
+      <section className="py-16 bg-slate-50 relative border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-16">
             <div className="max-w-2xl space-y-4">
@@ -322,53 +246,19 @@ export default function Home() {
       </section>
 
       {/* Upcoming Events Section */}
-      <section className="py-24 bg-white border-t border-slate-100">
+      <section className="py-16 bg-white border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <div className="max-w-3xl mb-16 space-y-4">
+          <div className="max-w-3xl mb-12 space-y-4">
             <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">
-              Upcoming Sprints & Workshops
+              Upcoming Events
             </h2>
             <p className="text-sm text-slate-655 leading-relaxed font-light">
-              Open masterclasses, interactive speaker sessions, and pitch practice sprints happening soon at the Babcock campus.
+              Stay updated with BUSEC's upcoming initiatives, sessions, and challenge briefings on campus.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-150 flex flex-col justify-between h-full card-shadow hover:border-slate-255 hover:-translate-y-1 transition-all duration-200 group">
-              <div>
-                <div className="flex items-center justify-between text-[10px] text-busec-blue font-bold uppercase tracking-wider mb-4">
-                  <span>Workshop</span>
-                  <span>June 15, 2027</span>
-                </div>
-                <h3 className="font-display font-bold text-base text-slate-800">GTM Campus Strategies</h3>
-                <p className="text-xs text-slate-500 mt-2.5 leading-relaxed font-light">
-                  How to validate a consumer product with zero marketing budget using peer networks and student communities.
-                </p>
-              </div>
-              <div className="mt-8 pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">Tech Hub Seminar Room</span>
-                <Link href="/join" className="text-xs font-bold text-busec-blue hover:underline">Register</Link>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-150 flex flex-col justify-between h-full card-shadow hover:border-slate-255 hover:-translate-y-1 transition-all duration-200 group">
-              <div>
-                <div className="flex items-center justify-between text-[10px] text-busec-blue font-bold uppercase tracking-wider mb-4">
-                  <span>Interactive Session</span>
-                  <span>June 28, 2027</span>
-                </div>
-                <h3 className="font-display font-bold text-base text-slate-800">Pitching to Angel Investors</h3>
-                <p className="text-xs text-slate-500 mt-2.5 leading-relaxed font-light">
-                  Practical guidelines on building your pitch deck, preparing financial forecasts, and handling investor Q&A.
-                </p>
-              </div>
-              <div className="mt-8 pt-4 border-t border-slate-200/60 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">School of Computing Hall</span>
-                <Link href="/join" className="text-xs font-bold text-busec-blue hover:underline">Register</Link>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-150 flex flex-col justify-between h-full card-shadow hover:border-slate-255 hover:-translate-y-1 transition-all duration-200 group">
+          <div className="flex justify-center">
+            <div className="w-full max-w-md p-6 rounded-2xl bg-slate-50 border border-slate-150 flex flex-col justify-between card-shadow hover:border-busec-blue/30 hover:-translate-y-1 transition-all duration-200 group">
               <div>
                 <div className="flex items-center justify-between text-[10px] text-busec-blue font-bold uppercase tracking-wider mb-4">
                   <span>Incubator Briefing</span>
@@ -388,10 +278,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partners & Sponsors Logo Wall */}
+      {/* Partners Logo Wall */}
       <section className="py-16 bg-slate-50 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8 text-center space-y-6">
-          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Our Sponsor</span>
+          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block">Our Partners</span>
           <div className="flex justify-center items-center">
             <div className="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-black p-4 hover:scale-[1.02] transition-transform duration-300">
               <img
@@ -405,7 +295,7 @@ export default function Home() {
       </section>
 
       {/* Final Call to Action */}
-      <section className="py-24 bg-white relative overflow-hidden border-t border-slate-100">
+      <section className="py-16 bg-white relative overflow-hidden border-t border-slate-100">
         <div className="absolute inset-0 z-0 bg-gradient-to-t from-busec-blue/5 via-transparent to-transparent pointer-events-none"></div>
         <div className="relative max-w-5xl mx-auto px-6 text-center z-10 space-y-8">
           <h2 className="font-display font-black text-3xl sm:text-4xl text-busec-navy tracking-tight leading-none">

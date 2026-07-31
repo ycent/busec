@@ -8,8 +8,8 @@ import { Menu, X, ChevronDown, Award, Calendar, Users, BookOpen, Briefcase, Zap 
 const activitiesList = [
   { name: "Babcock Innovation Challenge (BIC)", href: "/bic", desc: "Flagship entrepreneurship competition & accelerator", icon: Award },
   { name: "Babcock Entrepreneurship Week (BEW)", href: "/bew", desc: "Annual gathering of students, founders & leaders", icon: Calendar },
-  { name: "Creative Summit", href: "/activities#creative-summit", desc: "Showcasing student creativity & tech innovation", icon: Zap },
-  { name: "Workshops & Trainings", href: "/activities#workshops", desc: "Practical skills for business builders", icon: BookOpen },
+  { name: "Babcock Creative Summit", href: "/activities#creative-summit", desc: "Showcasing student creativity & tech innovation", icon: Zap },
+  { name: "Babcock Student Entrepreneurship Conference", href: "/activities#workshops", desc: "Practical skills for business builders", icon: BookOpen },
   { name: "Networking Events", href: "/activities#networking", desc: "Connect with co-founders and industry pros", icon: Users },
   { name: "Outreach Projects", href: "/activities#outreach", desc: "Community-driven entrepreneurship initiatives", icon: Briefcase },
 ];
@@ -51,15 +51,15 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "glass-light py-4 shadow-sm"
-          : "bg-white/80 backdrop-blur-md py-5 border-b border-slate-100"
+          ? "glass-light py-2 md:py-4 shadow-sm"
+          : "bg-white/80 backdrop-blur-md py-3 md:py-5 border-b border-slate-100"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-16 h-16 flex items-center justify-center">
+            <div className="w-12 h-12 md:w-16 md:h-16 flex items-center justify-center transition-all duration-300">
               <img
                 src="/logo.jpg"
                 alt="BUSEC Logo"
@@ -183,10 +183,11 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="lg:hidden fixed inset-0 top-[76px] z-40 bg-white border-t border-slate-100 flex flex-col justify-between p-6 animate-in slide-in-from-right duration-300">
+        <div className={`lg:hidden fixed inset-0 ${scrolled ? "top-[65px]" : "top-[73px]"} z-40 bg-white border-t border-slate-100 flex flex-col justify-between p-6 animate-in slide-in-from-right duration-300`}>
           <div className="flex flex-col space-y-2 overflow-y-auto max-h-[70vh] pr-2">
             <Link
               href="/"
+              onClick={() => setIsOpen(false)}
               className={`p-3 rounded-xl text-base font-bold transition-colors ${
                 pathname === "/" ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
               }`}
@@ -195,6 +196,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/about"
+              onClick={() => setIsOpen(false)}
               className={`p-3 rounded-xl text-base font-bold transition-colors ${
                 pathname === "/about" ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
               }`}
@@ -210,6 +212,7 @@ export default function Navbar() {
                   <Link
                     key={act.name}
                     href={act.href}
+                    onClick={() => setIsOpen(false)}
                     className="flex items-center space-x-3 text-slate-650 hover:text-busec-blue"
                   >
                     <div className="w-1.5 h-1.5 rounded-full bg-busec-blue"></div>
@@ -223,6 +226,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={() => setIsOpen(false)}
                 className={`p-3 rounded-xl text-base font-bold transition-colors ${
                   pathname === link.href ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
                 }`}
@@ -235,6 +239,7 @@ export default function Navbar() {
           <div className="pt-6 border-t border-slate-100">
             <Link
               href="/join"
+              onClick={() => setIsOpen(false)}
               className="w-full py-4 rounded-xl text-center text-sm font-bold uppercase tracking-wider bg-busec-yellow text-busec-navy border border-busec-blue hover:bg-busec-navy hover:text-white transition-all duration-300 block"
             >
               Join BUSEC

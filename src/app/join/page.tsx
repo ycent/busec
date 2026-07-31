@@ -145,6 +145,7 @@ export default function JoinBusec() {
                     <option value="300L">300L</option>
                     <option value="400L">400L</option>
                     <option value="500L">500L</option>
+                    <option value="Postgraduate">Postgraduate</option>
                   </select>
                 </div>
               </div>
@@ -229,7 +230,7 @@ export default function JoinBusec() {
               </div>
               <div className="space-y-2">
                 <h3 className="font-display font-bold text-xl text-slate-800">Membership Checkout</h3>
-                <p className="text-xs text-slate-500 font-light">BUSEC Student Membership Registration Dues</p>
+                <p className="text-xs text-slate-500 font-light">BUSEC Student Membership Registration Dues (2026/2027 Session)</p>
                 <span className="font-display font-black text-3xl text-busec-blue block pt-2">₦5,000</span>
               </div>
 
@@ -241,6 +242,10 @@ export default function JoinBusec() {
                 <div className="flex justify-between">
                   <span>Matric:</span>
                   <span className="font-semibold text-slate-850">{formData.matricNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Session:</span>
+                  <span className="font-semibold text-slate-850">2026/2027</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Provider:</span>

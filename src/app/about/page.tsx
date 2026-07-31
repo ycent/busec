@@ -2,6 +2,8 @@
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 
 export default function About() {
   const sections = [
@@ -18,12 +20,12 @@ export default function About() {
     {
       id: "growth",
       title: "Our Growth & Milestones",
-      desc: "In under four years, BUSEC transitioned from a campus meetup group to an accredited Student Entrepreneurship Club. We launched the Babcock Innovation Challenge (BIC) and Babcock Entrepreneurship Week (BEW), growing our pool of active sponsors to include Paystack, Flutterwave, and PiggyVest."
+      desc: "In under four years, BUSEC transitioned from a campus meetup group to an accredited Student Entrepreneurship Club. We launched the Babcock Innovation Challenge (BIC) and Babcock Entrepreneurship Week (BEW), expanding our network, programs, and community support significantly."
     },
     {
       id: "today",
       title: "BUSEC Today",
-      desc: "Today, BUSEC is the leading student builder hub in Babcock University. With 1,500+ students impacted, a portfolio of 70+ student startups, and 10 million Naira in opportunities facilitated, we operate as a real venture incubator built by students, for students."
+      desc: "Today, BUSEC is the largest student entrepreneurship club in Africa and the leading student builder hub in Babcock University. With 1,500+ students impacted, a portfolio of 70+ student startups, and 10 million Naira in opportunities facilitated, we operate as a real venture incubator built by students, for students."
     },
     {
       id: "vision",
@@ -41,7 +43,7 @@ export default function About() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-busec-blue/5 via-transparent to-transparent"></div>
         <div className="relative max-w-7xl mx-auto px-6 md:px-8 text-center z-10 space-y-6">
           <h1 className="font-display font-black text-4xl sm:text-5xl md:text-6xl text-busec-navy tracking-tight leading-none max-w-4xl mx-auto">
-            The Hub of Campus Venture Builders.
+            The largest student entrepreneurship club in Africa
           </h1>
           <p className="text-base sm:text-lg text-slate-655 max-w-2xl mx-auto font-light leading-relaxed">
             We believe that the best way to learn entrepreneurship is to start building. BUSEC stands as the launchpad for Babcock's next generation of builders.
@@ -82,8 +84,79 @@ export default function About() {
         </div>
       </section>
 
+      {/* Flagship Initiatives & Programs Section */}
+      <section className="py-16 bg-white relative border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="max-w-3xl mb-12 space-y-4">
+            <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">
+              Flagship Initiatives & Programs
+            </h2>
+            <p className="text-sm text-slate-500 leading-relaxed font-light">
+              We design and coordinate structured programs to support builders at every phase, from raw concept validation to marketplace operations.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                title: "Babcock Innovation Challenge (BIC)",
+                desc: "Our premier multi-week incubation program and pitch competition offering equity-free seed funding and professional mentorship.",
+                link: "/bic",
+                badge: "Flagship Accelerator"
+              },
+              {
+                title: "Babcock Entrepreneurship Week (BEW)",
+                desc: "An annual gathering featuring keynote addresses, expert panels, fireside chats, and product exhibitions by student founders.",
+                link: "/bew",
+                badge: "Annual Summit"
+              },
+              {
+                title: "Babcock Creative Summit",
+                desc: "Connecting tech builders, designers, and copywriters to showcase digital products and collaborate on development guilds.",
+                link: "/activities#creative-summit",
+                badge: "Innovation Showcase"
+              },
+              {
+                title: "Babcock Student Entrepreneurship Conference",
+                desc: "Hands-on sessions on business planning, product design, financial modeling, and engineering tools led by industry experts.",
+                link: "/activities#workshops",
+                badge: "Student Conference"
+              }
+            ].map((program, idx) => (
+              <div
+                key={idx}
+                className="p-8 rounded-2xl bg-white border border-slate-150 card-shadow hover:border-busec-blue/30 hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[9px] font-bold text-busec-blue uppercase tracking-widest bg-busec-blue/5 px-2.5 py-1 rounded-md">
+                      {program.badge}
+                    </span>
+                  </div>
+                  <h3 className="font-display font-bold text-lg text-slate-800 mt-6 group-hover:text-busec-blue transition-colors duration-200">
+                    {program.title}
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-3.5 leading-relaxed font-light">
+                    {program.desc}
+                  </p>
+                </div>
+                <div className="mt-8 pt-4 border-t border-slate-100">
+                  <Link
+                    href={program.link}
+                    className="inline-flex items-center space-x-1 text-xs font-bold text-busec-blue hover:underline"
+                  >
+                    <span>Explore this initiative</span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Core Values / Pillar Section */}
-      <section className="py-24 bg-slate-50 border-t border-slate-100">
+      <section className="py-16 bg-slate-50 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <h2 className="font-display font-black text-3xl text-busec-navy tracking-tight">Our Core Ecosystem Pillars</h2>
