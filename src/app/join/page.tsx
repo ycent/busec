@@ -112,7 +112,7 @@ export default function JoinBusec() {
       const handler = window.PaystackPop.setup({
         key: publicKey,
         email: formData.email,
-        amount: 5000 * 100, // ₦5,000 in kobo
+        amount: 7000 * 100, // ₦7,000 in kobo
         currency: "NGN",
         ref: "PAY-" + Math.random().toString(36).substring(2, 11).toUpperCase(),
         callback: function (response: any) {
@@ -309,7 +309,7 @@ export default function JoinBusec() {
               <div className="space-y-2">
                 <h3 className="font-display font-bold text-xl text-slate-800">Membership Checkout</h3>
                 <p className="text-xs text-slate-500 font-light">BUSEC Student Membership Registration Dues (2026/2027 Session)</p>
-                <span className="font-display font-black text-3xl text-busec-blue block pt-2">₦5,000</span>
+                <span className="font-display font-black text-3xl text-busec-blue block pt-2">₦7,000</span>
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-slate-200 text-left text-xs space-y-2 text-slate-650 font-light">

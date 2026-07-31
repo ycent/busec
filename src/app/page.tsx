@@ -112,7 +112,7 @@ export default function Home() {
 
           {/* Centered Hero Feature Visual Card */}
           <div className="w-full max-w-5xl relative">
-            <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-150 aspect-[16/7] md:aspect-[21/9] w-full group bg-slate-50 hover:scale-[1.005] transition-transform duration-300">
+            <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-150 aspect-auto min-h-[280px] sm:aspect-[16/7] md:aspect-[21/9] w-full group bg-slate-50 hover:scale-[1.005] transition-transform duration-300">
               <img
                 src={showcaseCard.image}
                 alt={showcaseCard.title}
@@ -204,7 +204,7 @@ export default function Home() {
                     <img
                       src={story.image}
                       alt={story.title}
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
                     />
                   </div>
                   <div className="p-6 md:p-8 md:w-3/5 flex flex-col justify-between space-y-6">
