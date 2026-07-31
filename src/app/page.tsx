@@ -23,7 +23,7 @@ export default function Home() {
     desc: "Our top student builders compete live for equity-free seed capital.",
     link: "/bic",
     linkText: "Learn more about BIC",
-    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=1600"
+    image: "/images/gallery/img-6.jpg"
   });
 
   useEffect(() => {
@@ -31,12 +31,12 @@ export default function Home() {
       setCurrentBgIndex((prev) => (prev + 1) % heroImages.length);
     }, 5000);
 
-    const storedShowcase = localStorage.getItem("busec_hero_showcase");
+    const storedShowcase = localStorage.getItem("busec_hero_showcase_v2");
     if (storedShowcase) {
       setShowcaseCard(JSON.parse(storedShowcase));
     }
 
-    const storedStories = localStorage.getItem("busec_builder_stories");
+    const storedStories = localStorage.getItem("busec_builder_stories_v2");
     if (storedStories) {
       const parsed = JSON.parse(storedStories);
       setStories(parsed.slice(0, 2));
@@ -51,7 +51,7 @@ export default function Home() {
     } else {
       setStories(builderStories.slice(0, 2));
       if (builderStories.length > 0) {
-        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+        localStorage.setItem("busec_builder_stories_v2", JSON.stringify(builderStories));
       }
     }
 

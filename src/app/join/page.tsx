@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 import { CreditCard, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
 
 export default function JoinBusec() {
@@ -21,42 +22,119 @@ export default function JoinBusec() {
 
   const [loading, setLoading] = useState(false);
   const [txRef, setTxRef] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage("");
     setStep(2);
   };
 
-  const handlePaymentSimulation = () => {
-    setLoading(true);
-    const ref = "PAY-" + Math.random().toString(36).substring(2, 11).toUpperCase();
+  const saveApplicationToStorage = (ref: string) => {
+    const existingAppsJson = localStorage.getItem("busec_membership_applications");
+    const existingApps = existingAppsJson ? JSON.parse(existingAppsJson) : [];
     
-    setTimeout(() => {
-      setTxRef(ref);
-      
-      const existingAppsJson = localStorage.getItem("busec_membership_applications");
-      const existingApps = existingAppsJson ? JSON.parse(existingAppsJson) : [];
-      
-      const newApplication = {
-        id: "APP-" + Date.now(),
-        ...formData,
-        paymentRef: ref,
-        paymentStatus: "Paid",
-        status: "Pending Approval",
-        date: new Date().toLocaleDateString()
-      };
-      
-      existingApps.unshift(newApplication);
-      localStorage.setItem("busec_membership_applications", JSON.stringify(existingApps));
+    const newApplication = {
+      id: "APP-" + Date.now(),
+      ...formData,
+      paymentRef: ref,
+      paymentStatus: "Paid",
+      status: "Pending Approval",
+      date: new Date().toLocaleDateString()
+    };
+    
+    existingApps.unshift(newApplication);
+    localStorage.setItem("busec_membership_applications", JSON.stringify(existingApps));
+  };
 
+  const verifyPaymentOnBackend = async (reference: string) => {
+    setLoading(true);
+    setErrorMessage("");
+
+    try {
+      const response = await fetch("/api/payment/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ reference })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        saveApplicationToStorage(data.reference);
+        setTxRef(data.reference);
+        setLoading(false);
+        setStep(3);
+      } else {
+        // Fallback for missing keys in dev/demo environment
+        if (response.status === 501 && data.code === "CREDENTIALS_MISSING") {
+          console.warn("Paystack Secret Key missing on server. Simulating verification success for development.");
+          saveApplicationToStorage(reference);
+          setTxRef(reference);
+          setLoading(false);
+          setStep(3);
+          return;
+        }
+
+        setErrorMessage(data.error || "Payment verification failed.");
+        setLoading(false);
+      }
+    } catch (err: any) {
+      console.error("Verification callback error:", err);
+      setErrorMessage("Network error verifying transaction. Please check connection.");
       setLoading(false);
-      setStep(3);
-    }, 2000);
+    }
+  };
+
+  const handlePaystackCheckout = () => {
+    setLoading(true);
+    setErrorMessage("");
+
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+
+    if (!publicKey || publicKey === "pk_test_placeholder_key_here") {
+      console.warn("NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY is not configured. Falling back to test simulation mode.");
+      
+      const ref = "TEST-SIM-" + Math.random().toString(36).substring(2, 11).toUpperCase();
+      setTimeout(() => {
+        saveApplicationToStorage(ref);
+        setTxRef(ref);
+        setLoading(false);
+        setStep(3);
+      }, 1500);
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      const handler = window.PaystackPop.setup({
+        key: publicKey,
+        email: formData.email,
+        amount: 5000 * 100, // ₦5,000 in kobo
+        currency: "NGN",
+        ref: "PAY-" + Math.random().toString(36).substring(2, 11).toUpperCase(),
+        callback: function (response: any) {
+          verifyPaymentOnBackend(response.reference);
+        },
+        onClose: function () {
+          setLoading(false);
+        }
+      });
+
+      handler.openIframe();
+    } catch (err: any) {
+      console.error("Failed to load Paystack setup:", err);
+      setErrorMessage("Could not load Paystack Checkout interface. Please check internet connection.");
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <Navbar />
+      <Script src="https://js.paystack.co/v1/inline.js" strategy="lazyOnload" />
 
       {/* Hero Header */}
       <section className="relative pt-36 pb-10 overflow-hidden bg-slate-55 border-b border-slate-100">
@@ -253,19 +331,25 @@ export default function JoinBusec() {
                 </div>
               </div>
 
+              {errorMessage && (
+                <div className="text-xs font-semibold text-rose-600 bg-rose-50 p-3 rounded-lg border border-rose-100 text-left">
+                  {errorMessage}
+                </div>
+              )}
+
               <div className="space-y-3">
                 <button
-                  onClick={handlePaymentSimulation}
+                  onClick={handlePaystackCheckout}
                   disabled={loading}
                   className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-650/50 text-white font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center space-x-2 transition-all cursor-pointer"
                 >
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Validating payment reference...</span>
+                      <span>Processing transaction...</span>
                     </>
                   ) : (
-                    <span>Simulate Successful Payment</span>
+                    <span>Pay with Paystack</span>
                   )}
                 </button>
                 <button

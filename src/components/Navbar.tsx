@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, Award, Calendar, Users, BookOpen, Briefcase, Zap } from "lucide-react";
+import { Menu, X, ChevronDown, Award, Calendar, Users, BookOpen, Briefcase, Zap, Home, Info, Image, FileText, Handshake } from "lucide-react";
 
 const activitiesList = [
   { name: "Babcock Innovation Challenge (BIC)", href: "/bic", desc: "Flagship entrepreneurship competition & accelerator", icon: Award },
@@ -181,61 +181,95 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
-
-      {/* Mobile Drawer */}
+      </nav>      {/* Mobile Drawer */}
       {isOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-white border-t border-slate-100 flex flex-col p-6 pt-24 space-y-6 overflow-y-auto animate-in slide-in-from-right duration-300">
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-1">
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className={`p-3 rounded-xl text-base font-bold transition-colors ${
-                pathname === "/" ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
+              className={`flex items-center space-x-3.5 p-3.5 rounded-2xl text-sm font-extrabold transition-all group ${
+                pathname === "/" 
+                  ? "text-busec-blue bg-busec-blue/5 border-l-4 border-busec-blue pl-4" 
+                  : "text-slate-700 hover:bg-slate-50 hover:text-busec-blue border-l-4 border-transparent"
               }`}
             >
-              Home
+              <Home className={`w-4 h-4 transition-colors ${
+                pathname === "/" ? "text-busec-blue" : "text-slate-400 group-hover:text-busec-blue"
+              }`} />
+              <span>Home</span>
             </Link>
             <Link
               href="/about"
               onClick={() => setIsOpen(false)}
-              className={`p-3 rounded-xl text-base font-bold transition-colors ${
-                pathname === "/about" ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
+              className={`flex items-center space-x-3.5 p-3.5 rounded-2xl text-sm font-extrabold transition-all group ${
+                pathname === "/about" 
+                  ? "text-busec-blue bg-busec-blue/5 border-l-4 border-busec-blue pl-4" 
+                  : "text-slate-700 hover:bg-slate-50 hover:text-busec-blue border-l-4 border-transparent"
               }`}
             >
-              About
+              <Info className={`w-4 h-4 transition-colors ${
+                pathname === "/about" ? "text-busec-blue" : "text-slate-400 group-hover:text-busec-blue"
+              }`} />
+              <span>About</span>
             </Link>
 
             {/* Mobile Activities Header */}
-            <div className="p-3 border-y border-slate-100 my-2">
-              <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest block mb-3">Activities</span>
-              <div className="grid grid-cols-1 gap-2.5">
-                {activitiesList.map((act) => (
-                  <Link
-                    key={act.name}
-                    href={act.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center space-x-3 text-slate-650 hover:text-busec-blue"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-busec-blue"></div>
-                    <span className="text-sm font-semibold">{act.name}</span>
-                  </Link>
-                ))}
+            <div className="p-3 border-y border-slate-100/80 my-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3.5 px-2">Featured Programs</span>
+              <div className="grid grid-cols-1 gap-2">
+                {activitiesList.map((act) => {
+                  const ActIcon = act.icon;
+                  return (
+                    <Link
+                      key={act.name}
+                      href={act.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center space-x-3 p-2.5 rounded-xl transition-all group ${
+                        pathname === act.href 
+                          ? "text-busec-blue bg-busec-blue/5" 
+                          : "text-slate-600 hover:text-busec-blue hover:bg-slate-55"
+                      }`}
+                    >
+                      <div className={`p-1.5 rounded-lg transition-colors ${
+                        pathname === act.href ? "bg-busec-blue/10 text-busec-blue" : "bg-slate-105 text-slate-450 group-hover:bg-busec-blue/10 group-hover:text-busec-blue"
+                      }`}>
+                        <ActIcon className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs font-bold leading-none">{act.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
-            {navLinks.slice(2).map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`p-3 rounded-xl text-base font-bold transition-colors ${
-                  pathname === link.href ? "text-busec-blue bg-slate-50" : "text-slate-700 hover:bg-slate-50"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks.slice(2).map((link) => {
+              const iconMap: { [key: string]: any } = {
+                "Executives": Users,
+                "Gallery": Image,
+                "Resources": BookOpen,
+                "Stories": FileText,
+                "Partners": Handshake
+              };
+              const LinkIcon = iconMap[link.name] || BookOpen;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center space-x-3.5 p-3.5 rounded-2xl text-sm font-extrabold transition-all group ${
+                    pathname === link.href 
+                      ? "text-busec-blue bg-busec-blue/5 border-l-4 border-busec-blue pl-4" 
+                      : "text-slate-700 hover:bg-slate-50 hover:text-busec-blue border-l-4 border-transparent"
+                  }`}
+                >
+                  <LinkIcon className={`w-4 h-4 transition-colors ${
+                    pathname === link.href ? "text-busec-blue" : "text-slate-400 group-hover:text-busec-blue"
+                  }`} />
+                  <span>{link.name}</span>
+                </Link>
+              );
+            })}
           </div>
 
           <div className="pt-4 pb-8">

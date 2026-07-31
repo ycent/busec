@@ -136,7 +136,7 @@ CREATE TABLE bew_editions (
     desc: "Our top student builders compete live for equity-free seed capital.",
     link: "/bic",
     linkText: "Learn more about BIC",
-    image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=1600"
+    image: "/images/gallery/img-6.jpg"
   });
 
   useEffect(() => {
@@ -194,17 +194,17 @@ CREATE TABLE bew_editions (
       setBewEditions(initialBew);
     }
 
-    const storedShowcase = localStorage.getItem("busec_hero_showcase");
+    const storedShowcase = localStorage.getItem("busec_hero_showcase_v2");
     if (storedShowcase) {
       setShowcaseForm(JSON.parse(storedShowcase));
     }
 
-    const storedStories = localStorage.getItem("busec_builder_stories");
+    const storedStories = localStorage.getItem("busec_builder_stories_v2");
     if (storedStories) {
       const parsed = JSON.parse(storedStories);
       if (parsed.length === 0 && builderStories.length > 0) {
         setStories(builderStories);
-        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+        localStorage.setItem("busec_builder_stories_v2", JSON.stringify(builderStories));
       } else {
         setStories(parsed);
         // Auto sync to backend if localStorage differs from the file
@@ -213,7 +213,7 @@ CREATE TABLE bew_editions (
         }
       }
     } else {
-      localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+      localStorage.setItem("busec_builder_stories_v2", JSON.stringify(builderStories));
       setStories(builderStories);
       if (builderStories.length > 0) {
         saveStoriesToBackend(builderStories);
@@ -255,7 +255,7 @@ CREATE TABLE bew_editions (
 
   const handleSaveShowcase = (e: React.FormEvent) => {
     e.preventDefault();
-    localStorage.setItem("busec_hero_showcase", JSON.stringify(showcaseForm));
+    localStorage.setItem("busec_hero_showcase_v2", JSON.stringify(showcaseForm));
     alert("Homepage hero showcase card updated! Go to the home page to view the change.");
   };
 
@@ -397,7 +397,7 @@ CREATE TABLE bew_editions (
     }
 
     setStories(updated);
-    localStorage.setItem("busec_builder_stories", JSON.stringify(updated));
+    localStorage.setItem("busec_builder_stories_v2", JSON.stringify(updated));
     saveStoriesToBackend(updated);
 
     setStoryForm({
@@ -430,7 +430,7 @@ CREATE TABLE bew_editions (
     if (confirm("Are you sure you want to delete this story?")) {
       const updated = stories.filter(story => story.id !== storyId);
       setStories(updated);
-      localStorage.setItem("busec_builder_stories", JSON.stringify(updated));
+      localStorage.setItem("busec_builder_stories_v2", JSON.stringify(updated));
       saveStoriesToBackend(updated);
       if (editingStoryId === storyId) {
         setEditingStoryId(null);

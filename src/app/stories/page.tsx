@@ -12,7 +12,7 @@ export default function BuilderStories() {
   const [stories, setStories] = useState<BuilderStory[]>([]);
 
   useEffect(() => {
-    const storedStories = localStorage.getItem("busec_builder_stories");
+    const storedStories = localStorage.getItem("busec_builder_stories_v2");
     if (storedStories) {
       const parsed = JSON.parse(storedStories);
       setStories(parsed);
@@ -27,7 +27,7 @@ export default function BuilderStories() {
     } else {
       setStories(builderStories);
       if (builderStories.length > 0) {
-        localStorage.setItem("busec_builder_stories", JSON.stringify(builderStories));
+        localStorage.setItem("busec_builder_stories_v2", JSON.stringify(builderStories));
       }
     }
   }, []);
