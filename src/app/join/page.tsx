@@ -92,7 +92,7 @@ export default function JoinBusec() {
     setLoading(true);
     setErrorMessage("");
 
-    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_live_bab8fd90759a60d6cc0461fd82594b8c283fc605";
 
     if (!publicKey || publicKey === "pk_test_placeholder_key_here") {
       console.warn("NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY is not configured. Falling back to test simulation mode.");
