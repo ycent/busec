@@ -54,3 +54,9 @@ body {
 .card-shadow-hover:hover {
   box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.06), 0 10px 10px -5px rgba(15, 23, 42, 0.04);
 }
+
+/* Custom portrait image positioning for founder profile photos */
+.object-portrait-founder {
+  object-fit: cover;
+  object-position: center 30% !important;
+}

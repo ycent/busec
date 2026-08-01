@@ -204,7 +204,7 @@ export default function Home() {
                     <img
                       src={story.image}
                       alt={story.title}
-                      className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+                      className="absolute inset-0 w-full h-full object-portrait-founder group-hover:scale-[1.02] transition-transform duration-500"
                     />
                   </div>
                   <div className="p-6 md:p-8 md:w-3/5 flex flex-col justify-between space-y-6">

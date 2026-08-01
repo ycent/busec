@@ -68,7 +68,7 @@ export default function BuilderStories() {
                     <img
                       src={story.image}
                       alt={story.title}
-                      className="w-full h-full object-cover object-top hover:scale-[1.01] transition-transform duration-500"
+                      className="w-full h-full object-portrait-founder hover:scale-[1.01] transition-transform duration-500"
                     />
                   </div>
 
