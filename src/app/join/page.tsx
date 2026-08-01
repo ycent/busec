@@ -4,6 +4,7 @@ import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import { supabase } from "@/lib/supabase";
 import { CreditCard, CheckCircle2, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
 
 export default function JoinBusec() {
@@ -30,7 +31,38 @@ export default function JoinBusec() {
     setStep(2);
   };
 
-  const saveApplicationToStorage = (ref: string) => {
+  const saveApplicationToStorage = async (ref: string) => {
+    // Central Database Integration (Supabase)
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from("membership_applications")
+          .insert({
+            full_name: formData.fullName,
+            matric_number: formData.matricNumber,
+            department: formData.department,
+            level: formData.level,
+            email: formData.email,
+            phone: formData.phone,
+            interests: formData.interests,
+            why_join: formData.whyJoin,
+            owns_business: formData.ownsBusiness,
+            payment_reference: ref,
+            payment_status: "Paid",
+            application_status: "Pending Approval"
+          });
+
+        if (error) {
+          console.error("Supabase insertion error:", error);
+        } else {
+          console.log("Successfully recorded candidate registration in Supabase.");
+        }
+      } catch (err) {
+        console.error("Failed to write to Supabase:", err);
+      }
+    }
+
+    // Local Storage Cache Fallback
     const existingAppsJson = localStorage.getItem("busec_membership_applications");
     const existingApps = existingAppsJson ? JSON.parse(existingAppsJson) : [];
     
@@ -57,7 +89,7 @@ export default function JoinBusec() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ reference })
+        body: JSON.stringify({ reference, formData })
       });
 
       const data = await response.json();

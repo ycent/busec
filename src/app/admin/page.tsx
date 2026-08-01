@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
 import { bicEditions as initialBic, BICEdition, bewEditions as initialBew, BEWEdition, galleryAlbums, builderStories } from "@/lib/mockData";
 import { Download, Plus, CheckCircle, XCircle, Database, Key, Copy, Check, Trash2, Image, Link2, Eye } from "lucide-react";
 
@@ -140,43 +141,84 @@ CREATE TABLE bew_editions (
   });
 
   useEffect(() => {
-    const storedApps = localStorage.getItem("busec_membership_applications");
-    if (storedApps) {
-      setApplications(JSON.parse(storedApps));
-    } else {
-      const defaultApps = [
-        {
-          id: "APP-01",
-          fullName: "Esther Omosehin",
-          matricNumber: "23/0422",
-          department: "Accounting",
-          level: "400L",
-          email: "esther@babcock.edu.ng",
-          phone: "08123456789",
-          interests: "FinTech, SaaS",
-          paymentRef: "PAY-ESTHER89D",
-          paymentStatus: "Paid",
-          status: "Approved",
-          date: "05/20/2027"
-        },
-        {
-          id: "APP-02",
-          fullName: "Tobi Alao",
-          matricNumber: "23/0115",
-          department: "Computer Science",
-          level: "400L",
-          email: "tobi@babcock.edu.ng",
-          phone: "08098765432",
-          interests: "Agritech, logistics",
-          paymentRef: "PAY-TOBI15A",
-          paymentStatus: "Paid",
-          status: "Approved",
-          date: "05/21/2027"
+    // Fetch registered members from Supabase if connected
+    const fetchApplications = async () => {
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("membership_applications")
+            .select("*")
+            .order("created_at", { ascending: false });
+
+          if (!error && data) {
+            const mapped = data.map((item: any) => ({
+              id: item.id,
+              fullName: item.full_name,
+              matricNumber: item.matric_number,
+              department: item.department,
+              level: item.level,
+              email: item.email,
+              phone: item.phone,
+              interests: item.interests,
+              whyJoin: item.why_join,
+              ownsBusiness: item.owns_business,
+              paymentRef: item.payment_reference,
+              paymentStatus: item.payment_status,
+              status: item.application_status,
+              date: new Date(item.created_at).toLocaleDateString()
+            }));
+            setApplications(mapped);
+            localStorage.setItem("busec_membership_applications", JSON.stringify(mapped));
+            return;
+          } else if (error) {
+            console.error("Supabase fetch applications error:", error);
+          }
+        } catch (err) {
+          console.error("Failed to connect to Supabase database:", err);
         }
-      ];
-      localStorage.setItem("busec_membership_applications", JSON.stringify(defaultApps));
-      setApplications(defaultApps);
-    }
+      }
+
+      // Local storage fallback
+      const storedApps = localStorage.getItem("busec_membership_applications");
+      if (storedApps) {
+        setApplications(JSON.parse(storedApps));
+      } else {
+        const defaultApps = [
+          {
+            id: "APP-01",
+            fullName: "Esther Omosehin",
+            matricNumber: "23/0422",
+            department: "Accounting",
+            level: "400L",
+            email: "esther@babcock.edu.ng",
+            phone: "08123456789",
+            interests: "FinTech, SaaS",
+            paymentRef: "PAY-ESTHER89D",
+            paymentStatus: "Paid",
+            status: "Approved",
+            date: "05/20/2027"
+          },
+          {
+            id: "APP-02",
+            fullName: "Tobi Alao",
+            matricNumber: "23/0115",
+            department: "Computer Science",
+            level: "400L",
+            email: "tobi@babcock.edu.ng",
+            phone: "08098765432",
+            interests: "Agritech, logistics",
+            paymentRef: "PAY-TOBI15A",
+            paymentStatus: "Paid",
+            status: "Approved",
+            date: "05/21/2027"
+          }
+        ];
+        localStorage.setItem("busec_membership_applications", JSON.stringify(defaultApps));
+        setApplications(defaultApps);
+      }
+    };
+
+    fetchApplications();
 
     const storedBic = localStorage.getItem("busec_bic_editions");
     if (storedBic) {
@@ -458,7 +500,24 @@ CREATE TABLE bew_editions (
     }
   };
 
-  const handleAppStatus = (appId: string, newStatus: string) => {
+  const handleAppStatus = async (appId: string, newStatus: string) => {
+    if (supabase) {
+      try {
+        const { error } = await supabase
+          .from("membership_applications")
+          .update({ application_status: newStatus })
+          .eq("id", appId);
+
+        if (error) {
+          console.error("Supabase update error:", error);
+          alert("Failed to update status in the Supabase database.");
+          return;
+        }
+      } catch (err) {
+        console.error("Failed to connect to Supabase:", err);
+      }
+    }
+
     const updated = applications.map((app) =>
       app.id === appId ? { ...app, status: newStatus } : app
     );

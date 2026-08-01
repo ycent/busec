@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(request: Request) {
   try {
-    const { reference } = await request.json();
+    const { reference, formData } = await request.json();
 
     if (!reference) {
       return NextResponse.json(
@@ -15,6 +16,28 @@ export async function POST(request: Request) {
 
     if (!secretKey || secretKey === "sk_test_placeholder_key_here") {
       console.warn("Paystack verification requested but secret key is not configured.");
+      
+      // Even if secretKey is missing, we can write the pending registration to Supabase
+      // for development mock checking if supabase exists
+      if (supabase && formData) {
+        await supabase
+          .from("membership_applications")
+          .insert({
+            full_name: formData.fullName,
+            matric_number: formData.matricNumber,
+            department: formData.department,
+            level: formData.level,
+            email: formData.email,
+            phone: formData.phone,
+            interests: formData.interests,
+            why_join: formData.whyJoin,
+            owns_business: formData.ownsBusiness,
+            payment_reference: reference,
+            payment_status: "Paid",
+            application_status: "Pending Approval"
+          });
+      }
+
       return NextResponse.json(
         {
           error: "PAYSTACK_SECRET_KEY is missing. Please configure it in your server's .env.local file.",
@@ -39,6 +62,31 @@ export async function POST(request: Request) {
     const result = await response.json();
 
     if (result.status && result.data && result.data.status === "success") {
+      // Securely insert the registration details into the database on successful payment confirmation
+      if (supabase && formData) {
+        const { error } = await supabase
+          .from("membership_applications")
+          .insert({
+            full_name: formData.fullName,
+            matric_number: formData.matricNumber,
+            department: formData.department,
+            level: formData.level,
+            email: formData.email,
+            phone: formData.phone,
+            interests: formData.interests,
+            why_join: formData.whyJoin,
+            owns_business: formData.ownsBusiness,
+            payment_reference: reference,
+            payment_status: "Paid",
+            application_status: "Pending Approval"
+          });
+
+        if (error) {
+          console.error("Database registration insertion error:", error);
+          // If it fails (e.g. duplicate matric), we still verified payment but let client know
+        }
+      }
+
       // Return details of verified payment
       return NextResponse.json({
         success: true,
