@@ -255,6 +255,7 @@ export default function JoinBusec() {
                     <option value="300L">300L</option>
                     <option value="400L">400L</option>
                     <option value="500L">500L</option>
+                    <option value="600L">600L</option>
                     <option value="Postgraduate">Postgraduate</option>
                   </select>
                 </div>
