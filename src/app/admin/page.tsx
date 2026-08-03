@@ -492,7 +492,7 @@ CREATE TABLE bew_editions (
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "busec2027" || password === "admin") {
+    if (password === "BUSEC27ADMIN") {
       setIsAuthenticated(true);
       setAuthError("");
     } else {
@@ -655,10 +655,6 @@ CREATE TABLE bew_editions (
                 Unlock Dashboard
               </button>
             </form>
-            
-            <div className="pt-2 text-[10px] text-slate-450 leading-normal font-light">
-              Note: For evaluation purposes, use the passkey <code className="text-busec-blue bg-busec-blue/5 px-1 py-0.5 rounded font-mono font-semibold">admin</code> or <code className="text-busec-blue bg-busec-blue/5 px-1 py-0.5 rounded font-mono font-semibold">busec2027</code>.
-            </div>
           </div>
         </section>
         <Footer />
