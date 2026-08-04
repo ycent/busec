@@ -36,6 +36,7 @@ export interface Executive {
   bio: string;
   linkedin: string;
   tenure: string;
+  phone?: string;
 }
 
 export interface PastExecutive {
@@ -216,7 +217,116 @@ export const bewEditions: BEWEdition[] = [
   }
 ];
 
-export const executives26_27: Executive[] = [];
+export const executives26_27: Executive[] = [
+  {
+    name: "Sodolamu Oluwaseyifunmi Sharon",
+    role: "Executive President",
+    image: "/images/executives/sharon-sodolamu.jpg",
+    bio: "Sharon provides strategic leadership and general executive oversight for BUSEC, driving global builder expansion.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+234 8165503067"
+  },
+  {
+    name: "Daniel Ovili",
+    role: "Vice President (Main Campus)",
+    image: "/images/executives/daniel-ovili.jpg",
+    bio: "Daniel co-directs main campus executive programs and oversees corporate sponsorships and brand identity.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2347075125696"
+  },
+  {
+    name: "Arigbede Faith Atinuke",
+    role: "Vice-President (Iperu Campus)",
+    image: "/images/executives/faith-arigbede.jpg",
+    bio: "Faith directs Iperu campus incubators, developer guilds, and local ecosystem workshops.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2347038477878"
+  },
+  {
+    name: "Israel Ayodele",
+    role: "General Secretary",
+    image: "/images/executives/israel-ayodele.jpg",
+    bio: "Israel manages official secretariat records, meeting protocols, and internal admin workflows.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2348063661475"
+  },
+  {
+    name: "Adaraloye Titilayomi Rebecca",
+    role: "Welfare Director",
+    image: "/images/executives/titilayomi-adaraloye.jpg",
+    bio: "Titilayomi handles student welfare, member logistics, and hospitality across flagship programs.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2349034150025"
+  },
+  {
+    name: "Ugwuanyi Alexander",
+    role: "Asst. Dir of Welfare",
+    image: "/images/executives/alexander-ugwuanyi.jpg",
+    bio: "Alexander assists with member support, event arrangements, and coordinate team welfare.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2347018599359"
+  },
+  {
+    name: "Oniyelu Imisioluwa Moyosore",
+    role: "Treasurer",
+    image: "/images/executives/imisioluwa-oniyelu.jpg",
+    bio: "Imisioluwa oversees budget allocations, treasury books, and coordinates event funding pools.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2348174586523"
+  },
+  {
+    name: "Buduka Buduka O.",
+    role: "Associate Treasurer",
+    image: "/images/executives/buduka-buduka.jpg",
+    bio: "Buduka assists the treasury department in financial reporting, budget audits, and compliance.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2349133155523"
+  },
+  {
+    name: "Ogunsemowo Oluwanifemi Mercy",
+    role: "P.R.O (Main Campus)",
+    image: "/images/executives/nifemi-ogunsemowo.jpg",
+    bio: "Oluwanifemi manages main campus press releases, media promotions, and brand communications.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2348025755562"
+  },
+  {
+    name: "Ephraim-Ukpe Condoleezza Dati",
+    role: "P.R.O (Iperu Campus)",
+    image: "/images/executives/condoleezza-ephraim.jpg",
+    bio: "Condoleezza leads Iperu campus publicity channels, local ads, and student relations.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2349022775763"
+  },
+  {
+    name: "Osunro Oluwaseun",
+    role: "Protocol Director",
+    image: "/images/executives/seun-osunro.jpg",
+    bio: "Oluwaseun directs speaker coordination, logistics hosting protocols, and official summit guests.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2349159998572"
+  },
+  {
+    name: "Ikein Alaere Augustina",
+    role: "Chaplain",
+    image: "/images/executives/alaere-ikein.jpg",
+    bio: "Alaere guides spiritual alignment, counselor services, and cabinet team ethical standards.",
+    linkedin: "https://linkedin.com",
+    tenure: "2026/2027",
+    phone: "+2349135676634"
+  }
+];
 
 export const executives25_26: Executive[] = [
   {
@@ -225,7 +335,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/hamed-otun.jpg",
     bio: "Hamed provided executive leadership and strategic direction for BUSEC during the 2025/2026 tenure, fostering key startup ecosystems and accelerating student-led projects.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "08025061765"
   },
   {
     name: "Ikhalea Paul Oluwatofunmi",
@@ -233,7 +344,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/paul-ikhalea.jpg",
     bio: "Paul co-directed BUSEC operations and headed external communications, corporate sponsorships, and university relations to expand the club's impact.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 810 646 5356"
   },
   {
     name: "Ikejiaku Munachimso",
@@ -241,7 +353,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/munachimso-ikejiaku.jpg",
     bio: "Munachimso managed the Iperu campus division, coordinating local workshops, incubation projects, and developer guilds for student builders.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 814 125 4533"
   },
   {
     name: "Arigbede Faith Atinuke",
@@ -249,7 +362,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/faith-arigbede.jpg",
     bio: "Faith directed internal administration, meeting archives, and member registration flows, ensuring smooth coordination across all departments.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 703 847 7878"
   },
   {
     name: "Adagboyi Elizabeth Monica",
@@ -257,7 +371,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/monica-adagboyi.jpg",
     bio: "Monica managed BUSEC's budgets, event funding pools, financial audits, and coordinated payments for student incubation activities.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 806 916 7238"
   },
   {
     name: "Upah Paul",
@@ -265,7 +380,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/paul-upah.jpg",
     bio: "Paul led BUSEC's media outreach, brand representation, public announcements, and press communications across Babcock University.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "09160465678"
   },
   {
     name: "Sodolamu Oluwaseyifunmi Sharon",
@@ -273,15 +389,17 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/sharon-sodolamu.jpg",
     bio: "Sharon coordinated logistics, speaker hosting, event protocols, and VIP guest relations for all BUSEC flagship summits.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 816 550 3067"
   },
   {
-    name: "Adeleke Ori-ofe Hephzibah",
+    name: "Ori-ofe Hephzibah Adeleke",
     role: "Dir. of Welfare",
     image: "/images/executives/hephzibah-adeleke.jpg",
     bio: "Hephzibah managed club welfare, member support programs, and local logistics for all active BUSEC coordinators and executives.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "08133162733"
   },
   {
     name: "Molade Dorcas Monijesu",
@@ -289,7 +407,8 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/dorcas-molade.jpg",
     bio: "Dorcas coordinated spiritual guidance, ethical leadership, and member welfare, keeping the executive team aligned with core campus principles.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "+234 703 152 8751"
   },
   {
     name: "Ovili Daniel Chukwuneku",
@@ -297,7 +416,101 @@ export const executives25_26: Executive[] = [
     image: "/images/executives/daniel-ovili.jpg",
     bio: "Daniel led visual brand assets, video shoots, graphic design, and social media campaigns for all flagship BUSEC programs.",
     linkedin: "https://linkedin.com",
-    tenure: "2025/2026"
+    tenure: "2025/2026",
+    phone: "07075125696"
+  }
+];
+
+export const executives24_25: Executive[] = [
+  {
+    name: "Aguocha-Ohiagbaji Uchenna U. E.",
+    role: "President",
+    image: "/images/executives/uchenna-aguocha.jpg",
+    bio: "Uchenna provided executive guidance and administrative oversight for BUSEC during the 24/25 cohort, launching core startup incubation tracks.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 703 491 4491"
+  },
+  {
+    name: "Obi-Ukpabi Einstein Ogeosonichukwu",
+    role: "Vice-President (Main Campus)",
+    image: "/images/executives/einstein-obi.jpg",
+    bio: "Einstein directed main campus operations, student engagements, and community outreach programs.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 912 597 5830"
+  },
+  {
+    name: "Fasusi Temiloluwa Damilola",
+    role: "Vice-President (Iperu Campus)",
+    image: "/images/executives/temiloluwa-fasusi.jpg",
+    bio: "Temiloluwa managed the Iperu campus initiatives, coordinating legal compliance panels and tech workshops.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 915 846 5063"
+  },
+  {
+    name: "Odika Vera Chiemego",
+    role: "General Secretary",
+    image: "/images/executives/vera-odika.jpg",
+    bio: "Vera supervised internal administration, secretariat workflows, minutes, and register operations.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 815 170 8433"
+  },
+  {
+    name: "Ukoha Smart Kelechi",
+    role: "Treasurer",
+    image: "/images/executives/smart-ukoha.jpg",
+    bio: "Smart administered BUSEC's financial bookkeeping, event budgets, and corporate funding accounts.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 907 888 2337"
+  },
+  {
+    name: "Akalamodu Oghenefejiro Flourish",
+    role: "Director of Welfare",
+    image: "/images/executives/flourish-akalamodu.jpg",
+    bio: "Flourish directed student member welfare programs, community logistics, and hospitality for summits.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 812 439 3852"
+  },
+  {
+    name: "Arise Olatunbosun Joseph",
+    role: "Director of Publicity",
+    image: "/images/executives/joseph-arise.jpg",
+    bio: "Joseph led digital marketing, design communication, and public announcements to expand club visibility.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 916 445 2032"
+  },
+  {
+    name: "Ikhalea Paul Oluwatofunmi",
+    role: "Protocol Officer",
+    image: "/images/executives/paul-ikhalea.jpg",
+    bio: "Paul directed speaker onboarding, logistics protocols, and official campus security coordination.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 810 646 5356"
+  },
+  {
+    name: "Ovili Daniel Chukwuneku",
+    role: "Media & Community Manager",
+    image: "/images/executives/daniel-ovili.jpg",
+    bio: "Daniel led visual brand assets, video productions, and social campaigns for key incubator programs.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 707 512 5696"
+  },
+  {
+    name: "Idiong Elizabeth Enobong",
+    role: "Chaplain",
+    image: "/images/executives/elizabeth-idiong.jpg",
+    bio: "Elizabeth provided ethical leadership, counsel, and welfare guidelines to the cabinet team.",
+    linkedin: "https://linkedin.com",
+    tenure: "2024/2025",
+    phone: "+234 913 339 5424"
   }
 ];
 
